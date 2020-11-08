@@ -6,6 +6,8 @@ on:
     paths:
       - "src/**/*.ts"
       - "src/**/*.vue"
+      - "package.json"
+      - ".github/workflows/draft-release.yml"
 
 jobs:
   package:
