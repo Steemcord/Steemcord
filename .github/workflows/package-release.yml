@@ -1,10 +1,9 @@
-name: Deploy
+name: Package Release
 on:
   push:
     tags:
       - '*'
-env:
-  NODE_ENV: GITHUB_DEPLOY
+
 jobs:
   package:
     runs-on: ${{ matrix.os }}

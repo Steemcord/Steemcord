@@ -1,4 +1,4 @@
-name: Deploy
+name: Draft Release Files
 on:
   push:
     branches:
@@ -6,8 +6,7 @@ on:
     paths:
       - "src/**/*.ts"
       - "src/**/*.vue"
-env:
-  NODE_ENV: GITHUB_DEPLOY
+
 jobs:
   package:
     runs-on: ${{ matrix.os }}
