@@ -62,7 +62,7 @@
     "init:pkg": "tsc --skipLibCheck && tsc util/prepare util/zip util/notarize",
     "ready-pkg": "rimraf dist && yarn build:dist && cd dist/app/ && yarn init:dev && cd ../../",
     "before-pkg": "yarn init:dev && yarn ready-pkg && yarn init:pkg && node util/prepare",
-    "pkg": "yarn before-pkg && electron-builder -p onTag"
+    "pkg": "yarn before-pkg && npx electron-builder -p onTag"
   },
   "dependencies": {
     "@discordjs/collection": "^0.1.6",
