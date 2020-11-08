@@ -29,7 +29,7 @@
       "publish": ["github"]
     },
     "linux": {
-      "target": "appImage",
+      "target": "tar.gz",
       "category": "Utility",
       "publish": ["github"]
     },
