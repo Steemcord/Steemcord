@@ -4,14 +4,16 @@ on:
     branches:
       - master
     paths:
-      - "presences/**"
+      - "**/*.ts"
+      - "**/*.vue"
       - ".eslintrc.*"
       - ".github/workflows/eslint.yml"
   pull_request:
     branches:
       - master
     paths:
-      - "presences/**"
+      - "**/*.ts"
+      - "**/*.vue"
       - ".eslintrc.*"
       - ".github/workflows/eslint.yml"
 jobs:

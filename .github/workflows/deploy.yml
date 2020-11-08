@@ -41,9 +41,7 @@ jobs:
       - name: Prepare to package
         run: yarn init:pkg && yarn before-pkg
       - name: Package
-        run: npx electron-builder build --publish always
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx electron-builder
       - name: Zip Package
         run: node util/zip dist/${{ matrix.folder_name }} Steemcord-${{ matrix.asset_name }}.zip --zip
       - name: Upload packages

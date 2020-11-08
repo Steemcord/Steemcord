@@ -39,6 +39,5 @@
         "allowFirstLine": false
       }
     }]
-  },
-  "ignorePatterns": ["webpack.config.js", "dist/"]
+  }
 }

@@ -11,6 +11,10 @@
     "appId": "com.snazzah.steemcord",
     "productName": "Steemcord",
     "copyright": "Copyright © 2020 Snazzah",
+    "publish": {
+      "provider": "github",
+      "releaseType": "draft"
+    },
     "win": {
       "publish": ["github"]
     },

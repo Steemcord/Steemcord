@@ -1,0 +1,40 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "src/**/*.ts"
+      - "src/**/*.vue"
+env:
+  NODE_ENV: GITHUB_DEPLOY
+jobs:
+  package:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+      - name: Restore CI Cache
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-12-${{ hashFiles('**/yarn.lock') }}
+      - name: Set Global Folder
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          mkdir ~/.npm-global
+          npm config set prefix '~/.npm-global'
+          export PATH=~/.npm-global/bin:$PATH
+      - name: Install Dependencies
+        run: |
+          npm i
+          npm i -g typescript rimraf electron-builder yarn
+      - name: Prepare to package
+        run: yarn init:pkg && yarn before-pkg
+      - name: Package
+        run: npx electron-builder build --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
