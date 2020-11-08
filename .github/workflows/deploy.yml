@@ -37,11 +37,11 @@ jobs:
       - name: Install Dependencies
         run: |
           npm i
-          npm i -g typescript rimraf electron-builder
+          npm i -g typescript rimraf electron-builder yarn
       - name: Prepare to package
-        run: npm run init:pkg
+        run: yarn init:pkg && yarn before-pkg
       - name: Package
-        run: npm run pkg
+        run: npx electron-builder build --publish always
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Zip Package
@@ -51,5 +51,5 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: Steemcord-${{ matrix.asset_name }}.zip
-          asset_name: Steemcord-${{ matrix.asset_name }}
+          asset_name: Steemcord-${{ matrix.asset_name }}-unpacked.zip
           tag: ${{ github.ref }}

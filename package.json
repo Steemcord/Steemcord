@@ -11,6 +11,9 @@
     "appId": "com.snazzah.steemcord",
     "productName": "Steemcord",
     "copyright": "Copyright © 2020 Snazzah",
+    "win": {
+      "publish": ["github"]
+    },
     "mac": {
       "category": "public.app-category.utilities",
       "target": "dmg",
@@ -18,7 +21,13 @@
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist",
-      "darkModeSupport": true
+      "darkModeSupport": true,
+      "publish": ["github"]
+    },
+    "linux": {
+      "target": "appImage",
+      "category": "Utility",
+      "publish": ["github"]
     },
     "dmg": {
       "backgroundColor": "#1e272e",
@@ -61,7 +70,7 @@
     "init:pkg": "tsc --skipLibCheck && tsc util/prepare util/zip util/notarize",
     "ready-pkg": "rimraf dist && yarn build:dist && cd dist/app/ && yarn init:dev && cd ../../",
     "before-pkg": "yarn init:dev && yarn ready-pkg && yarn init:pkg && node util/prepare",
-    "pkg": "yarn before-pkg && npx electron-builder -p onTag"
+    "pkg": "yarn before-pkg && npx electron-builder"
   },
   "dependencies": {
     "@discordjs/collection": "^0.1.6",
