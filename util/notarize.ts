@@ -10,6 +10,6 @@ exports.default = async function notarizing(context) {
     appBundleId: 'com.snazzah.steemcord',
     appPath: `${appOutDir}/${appName}.app`,
     appleId: process.env.APPLE_ID,
-    appleIdPassword: process.env.APPLE_PASSWOR,
+    appleIdPassword: process.env.APPLE_PASSWORD,
   });
 };
