@@ -34,7 +34,7 @@ jobs:
       - name: Install Dependencies
         run: |
           npm i
-          npm i -g typescript rimraf
+          npm i -g typescript rimraf electron-builder
       - name: Prepare to package
         run: npm run init:pkg
       - name: Package
@@ -63,10 +63,16 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-12-${{ hashFiles('**/yarn.lock') }}
+      - name: Set Global Folder
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          mkdir ~/.npm-global
+          npm config set prefix '~/.npm-global'
+          export PATH=~/.npm-global/bin:$PATH
       - name: Install dependencies
         run: |
           sudo npm i
-          sudo npm i -g typescript yarn rimraf
+          sudo npm i -g typescript yarn rimraf electron-builder
       - name: Package & Publish
         run: yarn run pkg
         env:
