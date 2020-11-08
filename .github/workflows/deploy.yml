@@ -47,9 +47,7 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
       - name: Zip Package
-        run: |
-          rimraf dist/app
-          node util/zip dist/${{ matrix.folder_name }} Steemcord-${{ github.ref }}-${{ matrix.asset_name }}.zip --zip
+        run: node util/zip dist/${{ matrix.folder_name }} Steemcord-${{ github.ref }}-${{ matrix.asset_name }}.zip --zip
       - name: Upload packages
         uses: svenstaro/upload-release-action@v2
         with:
