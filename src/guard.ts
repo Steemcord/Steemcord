@@ -46,7 +46,7 @@ export async function prompt(domain: string | null, failedBefore: boolean): Prom
       logger.info(`Returned ${code}`);
       win.close();
       win = null;
-      resolve(code.toLowerCase());
+      resolve(code ? code.toLowerCase() : null);
     });
   
     ipcMain.once('guard-ready', () => {
