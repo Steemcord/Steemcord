@@ -44,8 +44,6 @@ jobs:
         run: npm run pkg
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
       - name: Zip Package
         run: node util/zip dist/${{ matrix.folder_name }} Steemcord-${{ github.ref }}-${{ matrix.asset_name }}.zip --zip
       - name: Upload packages
