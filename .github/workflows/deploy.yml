@@ -12,10 +12,13 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
+            folder_name: linux-unpacked
             asset_name: linux
           - os: windows-latest
+            folder_name: win-unpacked
             asset_name: windows
           - os: macos-latest
+            folder_name: mac
             asset_name: mac
     steps:
       - uses: actions/checkout@master
@@ -41,7 +44,11 @@ jobs:
         run: |
           npm run pkg
           rimraf dist/app
-          node util/zip dist Steemcord-${{ github.ref }}-${{ matrix.asset_name }}.zip --zip
+          node util/zip dist/${{ matrix.folder_name }} Steemcord-${{ github.ref }}-${{ matrix.asset_name }}.zip --zip
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASS: ${{ secrets.APPLE_PASS }}
       - name: Upload packages
         uses: svenstaro/upload-release-action@v2
         with:
@@ -49,33 +56,3 @@ jobs:
           file: Steemcord-${{ github.ref }}-${{ matrix.asset_name }}.zip
           asset_name: Steemcord-${{ github.ref }}-${{ matrix.asset_name }}
           tag: ${{ github.ref }}
-  createInstallers:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macOS-latest, windows-latest]
-    needs: package
-    steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-node@master
-      - name: Restore CI Cache
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-12-${{ hashFiles('**/yarn.lock') }}
-      - name: Set Global Folder
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          mkdir ~/.npm-global
-          npm config set prefix '~/.npm-global'
-          export PATH=~/.npm-global/bin:$PATH
-      - name: Install dependencies
-        run: |
-          sudo npm i
-          sudo npm i -g typescript yarn rimraf electron-builder
-      - name: Package & Publish
-        run: yarn run pkg
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASS: ${{ secrets.APPLE_PASS }}
