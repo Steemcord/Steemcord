@@ -1,0 +1,37 @@
+name: ESLint
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "presences/**"
+      - ".eslintrc.*"
+      - ".github/workflows/eslint.yml"
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "presences/**"
+      - ".eslintrc.*"
+      - ".github/workflows/eslint.yml"
+jobs:
+  validate:
+    name: ESLint
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'Steemcord'
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v2
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Restore CI Cache
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-12-${{ hashFiles('**/yarn.lock') }}
+      - name: Run ESLint
+        run: |
+          yarn
+          yarn lint

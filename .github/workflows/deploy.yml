@@ -1,0 +1,69 @@
+name: Deploy
+on:
+  push:
+    tags:
+      - '*'
+env:
+  NODE_ENV: GITHUB_DEPLOY
+jobs:
+  package:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            asset_name: linux
+          - os: windows-latest
+            asset_name: windows
+          - os: macos-latest
+            asset_name: mac
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+      - name: Restore CI Cache
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-12-${{ hashFiles('**/yarn.lock') }}
+      - name: Install Dependencies
+        run: |
+          npm i
+          npm i -g typescript rimraf
+      - name: Prepare to package
+        run: npm run init:pkg
+      - name: Package
+        run: |
+          npm run pkg
+          rimraf dist/app
+          node util/zip dist Steemcord-${{ github.ref }}-${{ matrix.asset_name }}.zip --zip
+      - name: Upload packages
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: Steemcord-${{ github.ref }}-${{ matrix.asset_name }}.zip
+          asset_name: Steemcord-${{ github.ref }}-${{ matrix.asset_name }}
+          tag: ${{ github.ref }}
+  createInstallers:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+    needs: package
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+      - name: Restore CI Cache
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-12-${{ hashFiles('**/yarn.lock') }}
+      - name: Install dependencies
+        run: |
+          sudo npm i
+          sudo npm i -g typescript yarn rimraf
+      - name: Package & Publish
+        run: yarn run pkg
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASS: ${{ secrets.APPLE_PASS }}

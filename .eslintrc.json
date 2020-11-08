@@ -1,0 +1,44 @@
+{
+  "env": {
+    "commonjs": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:vue/vue3-recommended",
+    "plugin:vue/recommended"
+  ],
+  "globals": {},
+  "parser": "vue-eslint-parser",
+  "parserOptions": {
+    "parser": "@typescript-eslint/parser",
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "overrides": [{
+    "files": ["src/view/**/*.vue"],
+    "rules": {
+      "@typescript-eslint/explicit-module-boundary-types": "off"
+    }
+  }],
+  "rules": {
+    "quotes": ["warn", "single"],
+    "semi": ["warn", "always"],
+    "@typescript-eslint/ban-ts-comment": "off",
+    "vue/component-definition-name-casing": "off",
+    "vue/max-attributes-per-line": ["error", {
+      "singleline": 3,
+      "multiline": {
+        "max": 3,
+        "allowFirstLine": false
+      }
+    }]
+  },
+  "ignorePatterns": ["webpack.config.js", "dist/"]
+}
