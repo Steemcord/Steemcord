@@ -45,11 +45,11 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Zip Package
-        run: node util/zip dist/${{ matrix.folder_name }} Steemcord-${{ github.ref }}-${{ matrix.asset_name }}.zip --zip
+        run: node util/zip dist/${{ matrix.folder_name }} Steemcord-${{ matrix.asset_name }}.zip --zip
       - name: Upload packages
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: Steemcord-${{ github.ref }}-${{ matrix.asset_name }}.zip
-          asset_name: Steemcord-${{ github.ref }}-${{ matrix.asset_name }}
+          file: Steemcord-${{ matrix.asset_name }}.zip
+          asset_name: Steemcord-${{ matrix.asset_name }}
           tag: ${{ github.ref }}
