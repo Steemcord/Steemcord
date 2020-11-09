@@ -53,6 +53,7 @@ export async function connect(): Promise<boolean> {
       });
       // @ts-ignore
       rpc.once('disconnected', () => {
+        appIDsInFolder.filter(id => !devPresences.has(id)).forEach(id => destroyRPC(id));
         rpcConnected = false;
         rpc.destroy();
         rpc = null;

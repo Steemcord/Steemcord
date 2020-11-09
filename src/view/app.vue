@@ -254,6 +254,7 @@ export default {
     },
     async reconnectDiscord() {
       this.discordStatus = 1;
+      if (presenceManager.rpc) await presenceManager.rpc.destroy();
       const success = await presenceManager.connect();
       if (!success) alert('Couldn\'t connect to Discord. Make sure that the client is running.');
     },

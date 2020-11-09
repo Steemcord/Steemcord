@@ -1,6 +1,10 @@
 <template>
   <div id="settingsPage" class="page">
     <h3>Settings</h3>
+    <a v-if="$parent.discordStatus !== 1" class="router-link" @click="$parent.reconnectDiscord">
+      <RefreshIcon />
+      <span>Restart RPC Clients</span>
+    </a>
     <ToggleInput
       v-model="autoCheckPresenceUpdates"
       title="Automatically check for presence updates"
@@ -91,6 +95,8 @@ const { remote } = window.require('electron');
 const settingsManager = remote.require('./managers/settings');
 const directoryPoint = remote.require('./managers/directoryPoint');
 const { MAIN_DIRECTORY_POINT } = remote.require('./constants');
+// @ts-ignore
+import RefreshIcon from './assets/svg/refresh.svg';
 
 function fillComputedSettings(settings: string[]) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -110,11 +116,10 @@ function fillComputedSettings(settings: string[]) {
 
 export default {
   name: 'Settings',
-  components: { ToggleInput, TextInput, NumberInput, DropdownInput },
+  components: { ToggleInput, TextInput, NumberInput, DropdownInput, RefreshIcon },
   data() {
     return {
-      mainDirectoryPoint: MAIN_DIRECTORY_POINT,
-      lol: 2
+      mainDirectoryPoint: MAIN_DIRECTORY_POINT
     };
   },
   computed: {
@@ -139,6 +144,11 @@ export default {
         settingsManager.settings.set('directoryPoint', value);
         return value;
       }
+    }
+  },
+  methods: {
+    reconnectDiscord() {
+      this.$parent.reconnectDiscord()
     }
   }
 };
