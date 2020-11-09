@@ -259,7 +259,7 @@ export default {
       if (!success) alert('Couldn\'t connect to Discord. Make sure that the client is running.');
     },
     updateApp() {
-      updater.quitAndInstall(true, true);
+      updater.updater.quitAndInstall(true, true);
     }
   }
 };
