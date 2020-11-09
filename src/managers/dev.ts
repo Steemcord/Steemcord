@@ -140,17 +140,22 @@ async function buildDevPresence(path: string) {
   if (lockedPresences.has(metadata.app_id)) return;
   lockedPresences.set(metadata.app_id, true);
 
-  const presence = getPresenceFromCode(readFileSync(join(path, 'index.ts'), 'utf8'));
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  if (!(presence instanceof Presence) || !presence.clientID || (presence as any)._eventsCount <= 0) return;
+  try {
+    const presence = getPresenceFromCode(readFileSync(join(path, 'index.ts'), 'utf8'));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (!(presence instanceof Presence) || !presence.clientID || (presence as any)._eventsCount <= 0) return;
 
-  const devPresence = currentPresences.get(metadata.app_id);
-  if(devPresence.rpc) devPresence.rpc.destroy();
-  // Destroy current RPC before creating another one to 
-  devPresence.rpc = createRPC(presence, metadata.app_id, true, metadata);
-  devPresence.metadata = metadata;
-  currentPresences.set(metadata.app_id, devPresence);
-  lockedPresences.delete(metadata.app_id);
+    const devPresence = currentPresences.get(metadata.app_id);
+    if(devPresence.rpc) devPresence.rpc.destroy();
+    // Destroy current RPC before creating another one to 
+    devPresence.rpc = createRPC(presence, metadata.app_id, true, metadata);
+    devPresence.metadata = metadata;
+    currentPresences.set(metadata.app_id, devPresence);
+    lockedPresences.delete(metadata.app_id);
+  } catch (e) {
+    logger.error('Failed to parse presence', e);
+    return;
+  }
 }
 
 export async function openFileDialog(path?: string): Promise<void> {
