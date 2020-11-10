@@ -96,7 +96,7 @@
         @click="page.toggleEnabled(source.app.appid)"
       />
       <UpdateIcon
-        v-if="source.update"
+        v-if="source.update && source.class === 'white'"
         v-tippy="{ arrow: true, boundary: 'viewport' }"
         class="icon-btn"
         content="Update"
@@ -110,7 +110,7 @@
         @click="page.installPresence(source.metadata)"
       />
       <SettingsIcon
-        v-if="source.metadata && source.metadata.settings"
+        v-if="source.metadata && source.metadata.settings && !source.store"
         v-tippy="{ arrow: true, boundary: 'viewport' }"
         class="icon-btn"
         content="Settings"
