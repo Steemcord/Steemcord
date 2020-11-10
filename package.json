@@ -38,7 +38,6 @@
       "sign": false
     },
     "nsis": {
-      "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "uninstallDisplayName": "Steemcord",
       "installerSidebar": "build/installerSidebar.bmp"
