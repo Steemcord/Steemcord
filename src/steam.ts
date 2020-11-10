@@ -35,7 +35,7 @@ export interface MinimalGamePresence {
   
 // Prepare steam user data folder
 const dataFolder = join(app.getPath('userData'), 'steam-user');
-fs.access(join(app.getPath('userData'), 'steam-user'), fs.constants.F_OK, err => {
+fs.access(dataFolder, fs.constants.F_OK, err => {
   if(err) fs.mkdirSync(dataFolder);
 });
 
