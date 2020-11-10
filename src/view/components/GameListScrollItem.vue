@@ -9,7 +9,7 @@
       v-if="source.refreshButton"
       v-tippy="{ arrow: true, boundary: 'viewport' }"
       class="header-icon-btn"
-      :content="source.text || 'Refresh'"
+      :content="source.refreshTooltip || 'Refresh'"
       @click="page.reload"
     />
   </component>
