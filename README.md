@@ -5,7 +5,7 @@
 
 ## Taking Steam's Rich Presence to Discord!
 
-![](https://get.snaz.in/77PiRdT.png)
+<img src="https://get.snaz.in/77PiRdT.png" width="720">
 
 <br>
 </div>
