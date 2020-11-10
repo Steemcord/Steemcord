@@ -96,7 +96,7 @@
         @click="page.toggleEnabled(source.app.appid)"
       />
       <UpdateIcon
-        v-if="source.update && source.class === 'white'"
+        v-if="source.update"
         v-tippy="{ arrow: true, boundary: 'viewport' }"
         class="icon-btn"
         content="Update"
