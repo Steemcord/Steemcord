@@ -36,9 +36,11 @@ app.whenReady().then(async () => {
   
   // Prepare presence folder
   const presenceFolder = join(app.getPath('userData'), 'presences');
-  fs.access(join(app.getPath('userData'), 'presences'), fs.constants.F_OK, err => {
-    if(err) fs.mkdirSync(presenceFolder);
-  });
+  try {
+    fs.accessSync(presenceFolder, fs.constants.F_OK);
+  } catch (e) {
+    fs.mkdirSync(presenceFolder);
+  }
 	
 	win = new BrowserWindow({
     width: settings.get('window.width', 900) as number,

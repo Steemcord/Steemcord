@@ -35,9 +35,11 @@ export interface MinimalGamePresence {
   
 // Prepare steam user data folder
 const dataFolder = join(app.getPath('userData'), 'steam-user');
-fs.access(dataFolder, fs.constants.F_OK, err => {
-  if(err) fs.mkdirSync(dataFolder);
-});
+try {
+  fs.accessSync(dataFolder, fs.constants.F_OK);
+} catch (e) {
+  fs.mkdirSync(dataFolder);
+}
 
 export const user = new SteamUser({
   enablePicsCache: true,
