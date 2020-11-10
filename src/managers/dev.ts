@@ -7,11 +7,11 @@ import { readdirSync, readFileSync } from 'fs';
 import { semver } from 'joi-extension-semver';
 import { join, sep } from 'path';
 import BaseJoi from 'joi';
+import Collection from '@discordjs/collection';
 import { createRPC, PresenceMetadata, RPCClient } from '../rpc';
 import { getPresenceFromCode } from '../sandbox';
 import { appIDsInFolder } from './presence';
 import Presence from '../presence';
-import Collection from '@discordjs/collection';
 const Joi: BaseJoi.Root = BaseJoi.extend(semver);
 
 interface DevPresence {
@@ -92,15 +92,20 @@ export function validateDir(path: string): string | PresenceMetadata {
       const { error } = metadataSchema.validate(metadata);
       if (error) return `Metadata ${error.toString()}`;
 
-      // TypeScript validation
-      const presence = getPresenceFromCode(readFileSync(join(path, 'index.ts'), 'utf8'));
-      if (!(presence instanceof Presence))
-        return 'The module does not return a Presence prototype.';
-      if (!presence.clientID)
-        return 'The Presence prototype does not have a client ID defined.';
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if ((presence as any)._eventsCount <= 0)
-        return 'The Presence does not have any listeners.';
+      try {
+        // Module validation
+        const presence = getPresenceFromCode(readFileSync(join(path, 'index.ts'), 'utf8'));
+        if (!(presence instanceof Presence))
+          return 'The module does not return a Presence prototype.';
+        if (!presence.clientID)
+          return 'The Presence prototype does not have a client ID defined.';
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        if ((presence as any)._eventsCount <= 0)
+          return 'The Presence does not have any listeners.';
+      } catch (e) {
+        return 'The module has errored while parsing. Please check for code errors.';
+      }
+
       return metadata;
     } catch (e) {
       return 'The metadata.json is invalid and cannot be parsed.';
