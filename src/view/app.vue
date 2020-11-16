@@ -203,9 +203,11 @@ export default {
     };
     const rpcBind = () => this.currentPresence = rpc.lastPresence;
     const updateBind = ver => this.nextUpdateAvailable = ver;
+    const debugBind = message => console.log('[steam]', message);
 
     steam.emitter.on('appsUpdate', appsEventBind);
     steam.emitter.on('presence', presenceEventBind);
+    steam.user.on('debug', debugBind);
     presenceManager.emitter.on('rpcConnected', connectBind);
     presenceManager.emitter.on('rpcDisconnected', disconnectBind);
     presenceManager.emitter.on('rpcError', disconnectBind);
@@ -215,6 +217,7 @@ export default {
     const unloadBind = () => { 
       steam.emitter.removeListener('appsUpdate', appsEventBind);
       steam.emitter.removeListener('presence', presenceEventBind);
+      steam.user.removeListener('debug', debugBind);
       presenceManager.emitter.removeListener('rpcConnected', connectBind);
       presenceManager.emitter.removeListener('rpcDisconnected', disconnectBind);
       presenceManager.emitter.removeListener('rpcError', disconnectBind);

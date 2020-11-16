@@ -84,7 +84,6 @@ export default {
   },
   mounted() {
     this.rpc = rpc.rpcClients.get(this.appID);
-    console.log('init settings', this.appID, this.rpc);
     if (!this.rpc) {
       this.loading = false;
       return;

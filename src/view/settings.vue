@@ -148,7 +148,7 @@ export default {
   },
   methods: {
     reconnectDiscord() {
-      this.$parent.reconnectDiscord()
+      this.$parent.reconnectDiscord();
     }
   }
 };
