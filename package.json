@@ -4,7 +4,7 @@
   "description": "Taking Steam's Rich Presence to Discord!",
   "repository": "https://github.com/Steemcord/Steemcord",
   "author": "Snazzah",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "index.js",
   "license": "MIT",
   "build": {
