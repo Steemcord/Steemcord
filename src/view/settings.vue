@@ -91,7 +91,7 @@ import ToggleInput from './components/ToggleInput.vue';
 import TextInput from './components/TextInput.vue';
 import NumberInput from './components/NumberInput.vue';
 import DropdownInput from './components/DropdownInput.vue';
-const { remote } = window.require('electron');
+const remote = window.require('@electron/remote');
 const settingsManager = remote.require('./managers/settings');
 const directoryPoint = remote.require('./managers/directoryPoint');
 const { MAIN_DIRECTORY_POINT } = remote.require('./constants');

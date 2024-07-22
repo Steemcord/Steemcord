@@ -79,7 +79,8 @@
 </template>
 
 <script lang="ts">
-const { remote, ipcRenderer, shell } = window.require('electron');
+const remote = window.require('@electron/remote');
+const { ipcRenderer, shell } = window.require('electron');
 // @ts-ignore
 import EmailIcon from './email.svg';
 // @ts-ignore

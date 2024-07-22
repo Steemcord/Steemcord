@@ -89,13 +89,13 @@ export function matchReplace(pattern: MatchResult | string, replacePattern: stri
   let currentStarGroupIdx = 0;
   let freeVar;
   let freeVarGroup;
-  starGroups.forEach(function(starGroup) {
+  for (const starGroup of starGroups) {
     freeVarGroup = matchData.freeVars[starGroup.length] || [];
     freeVar = freeVarGroup.shift();
     freeVar = freeVar === undefined ? starGroup : freeVar;
     replacePattern = replaceAfter(replacePattern, currentStarGroupIdx, starGroup, freeVar);
     currentStarGroupIdx = replacePattern.indexOf(freeVar) + freeVar.length;
-  });
+  }
 
   return replacePattern;
 }

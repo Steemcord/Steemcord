@@ -5,6 +5,7 @@ import { ipcMain, BrowserWindow } from 'electron';
 import { GUARD_APP_URL } from './constants';
 import { win as parentWin } from './';
 import { join } from 'path';
+import * as remote from '@electron/remote/main';
 
 export let win: BrowserWindow;
 
@@ -29,10 +30,12 @@ export async function prompt(domain: string | null, failedBefore: boolean): Prom
       darkTheme: true,
       webPreferences: {
         nodeIntegration: true,
-        enableRemoteModule: true
+        contextIsolation: false
       }
     });
-  
+
+    remote.enable(win.webContents);
+
     win.loadURL(GUARD_APP_URL);
   
     win.once('ready-to-show', () => {

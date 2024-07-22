@@ -11,7 +11,7 @@
 <script lang="ts">
 import ScrollItem from './components/GameListScrollItem.vue';
 import PresenceSettingsModal from './components/PresenceSettingsModal.vue';
-const { remote } = window.require('electron');
+const remote = window.require('@electron/remote');
 const fuzzy = window.require('fuzzy');
 const Collection = window.require('@discordjs/collection');
 const presenceManager = remote.require('./managers/presence');

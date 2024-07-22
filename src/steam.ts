@@ -6,9 +6,8 @@ import { AbortSignal } from 'abort-controller';
 import EventEmitter from 'eventemitter3';
 import { EventEmitter as EventEmitter1 } from 'events';
 import TypedEmitter from 'typed-emitter';
-import SteamUser = require('steam-user');
+import SteamUser from 'steam-user';
 import { join } from 'path';
-import { SteamApp } from 'steam-user';
 import { app, Notification } from 'electron';
 import { sendGamePresence } from './rpc';
 import { prompt, killPrompt } from './guard';
@@ -46,6 +45,7 @@ export const user = new SteamUser({
   picsCacheAll: true,
   autoRelogin: true,
   dataDirectory: dataFolder,
+  renewRefreshTokens: true,
   machineIdType: (settings.get('machineIDType', 1) as number) + 2
 });
 
@@ -61,7 +61,8 @@ export let userName: string = null;
 export let userAvatar: string = null;
 export let accountName: string = null;
 export let steamID: string = null;
-export let apps: Array<SteamApp> = null;
+export let apps: any = null;
+// export let apps: Array<OwnedApp> = null;
 export let activeGame: MinimalGamePresence = null;
 export let steamGuardAvailable = true;
 
@@ -93,10 +94,10 @@ user.on('appUpdate', async () => {
 });
 
 
-user.on('loginKey', async loginKey => {
+user.on('refreshToken', async refreshToken => {
   // @ts-ignore
-  logger.info('New login key:', loginKey, user._logInDetails);
-  settings.set('login', { loginKey, accountName });
+  logger.info('New refresh token:', refreshToken, user._logInDetails);
+  settings.set('login', { refreshToken });
 });
 
 user.on('loggedOn', async details => {
@@ -124,7 +125,6 @@ user.on('disconnected', (eresult, msg) => {
   userAvatar = null;
   activeGame = null;
   accountName = null;
-  settings.delete('login');
   emitter.emit('presence', activeGame);
   emitter.emit('appsUpdate', apps);
 });
@@ -163,16 +163,18 @@ user.on('user', async (sid, data) => {
 
 export async function updateApps(): Promise<void> {
   try {
-    const data = await user.getUserOwnedApps(user.steamID);
-    apps = data.apps;
+    const data = await user.getUserOwnedApps(user.steamID, { includePlayedFreeGames: true, includeFreeSub: true });
+    // There's currently a mismatch between node-steam-user and @types
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    apps = (data as any).apps;
     emitter.emit('appsUpdate', apps);
   } catch (err) {
     logger.error('Failed to get user apps', err);
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function logOn(options: SteamUser.LogOnDetails): Promise<{ event: string; result: any[]; }> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+export async function logOn(options: any): Promise<{ event: string; result: any[]; }> {
   user.logOn(options);
   const { event, result } = await waitForEither(emitter, ['loggedOn', 'steamError', 'cancelSteamGuard']);
   if (event === 'loggedOn') accountName = options.accountName;
@@ -184,9 +186,9 @@ export async function autoLogin(): Promise<void> {
   logger.info('Autologging on');
   steamGuardAvailable = false;
   const { event, result } = await logOn({
-    ...(settings.get('login') as SteamUser.LogOnDetails),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ...(settings.get('login') as any),
     machineName: 'Steemcord',
-    rememberPassword: settings.get('regenLoginKey', false) as boolean
   });
   steamGuardAvailable = true;
   logger.info('Autologging result:', event, result);

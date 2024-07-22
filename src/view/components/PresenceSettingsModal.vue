@@ -54,7 +54,7 @@ import ToggleInput from './presence-settings/ToggleInput.vue';
 import TextInput from './presence-settings/TextInput.vue';
 import NumberInput from './presence-settings/NumberInput.vue';
 import DropdownInput from './presence-settings/DropdownInput.vue';
-const { remote } = window.require('electron');
+const remote = window.require('@electron/remote');
 const rpc = remote.require('./rpc');
 const steam = remote.require('./steam');
 const dev = remote.require('./managers/dev');

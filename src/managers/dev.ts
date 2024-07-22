@@ -207,7 +207,7 @@ export async function openFileDialog(path?: string): Promise<void> {
     destroyPresence(validationResult.app_id);
   }
 
-  if (appIDsInFolder.includes(validationResult.app_id)) {
+  if (appIDsInFolder !== null && appIDsInFolder.includes(validationResult.app_id)) {
     const errDialog = await dialog.showMessageBox(null, {
       type: 'warning',
       title: 'Installed Presence Conflict',
