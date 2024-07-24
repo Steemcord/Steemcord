@@ -5,7 +5,6 @@ import { match } from '../match';
 import { PresenceMetadata } from '../rpc';
 import { MAIN_DIRECTORY_POINT } from '../constants';
 import { settings } from './settings';
-import fetch from 'node-fetch';
 import Collection from '@discordjs/collection';
 
 interface DirectoryPoint {

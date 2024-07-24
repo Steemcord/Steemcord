@@ -12,6 +12,7 @@ import { start as initUpdater } from './managers/update';
 import { autoLogin } from './steam';
 import { APP_USER_MODEL_ID, MAIN_APP_URL } from './constants';
 import fs from 'fs';
+import * as remote from '@electron/remote/main';
 
 export let trayManager: TrayManager;
 export let win: BrowserWindow;
@@ -23,7 +24,8 @@ if (!app.requestSingleInstanceLock())
 
 app.setAppUserModelId(APP_USER_MODEL_ID);
 app.whenReady().then(async () => {
-	trayManager = new TrayManager();
+  trayManager = new TrayManager();
+  remote.initialize();
 
 	await Promise.all([initUpdater(), initAutoLaunch(), autoLogin(), initPresences(), startUpdateInterval()]);
 
@@ -58,9 +60,10 @@ app.whenReady().then(async () => {
     backgroundColor: '#25282e',
     webPreferences: {
       nodeIntegration: true,
-      enableRemoteModule: true
+      contextIsolation: false
     }
   });
+  remote.enable(win.webContents);
 
   win.on('close', () => {
     logger.info('Saving window location');

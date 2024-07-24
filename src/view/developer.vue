@@ -84,7 +84,8 @@
 
 <script lang="ts">
 import PresenceSettingsModal from './components/PresenceSettingsModal.vue';
-const { remote, shell } = window.require('electron');
+const remote = window.require('@electron/remote');
+const { shell } = window.require('electron');
 const dev = remote.require('./managers/dev');
 const rpc = remote.require('./rpc');
 const presenceManager = remote.require('./managers/presence');

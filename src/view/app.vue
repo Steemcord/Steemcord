@@ -99,7 +99,7 @@
 </template>
 
 <script lang="ts">
-const { remote } = window.require('electron');
+const remote = window.require('@electron/remote');
 const steam = remote.require('./steam');
 const constants = remote.require('./constants');
 const rpc = remote.require('./rpc');

@@ -25,6 +25,7 @@ Vue.config.devtools = false;
 
 Vue.use(VueRouter);
 Vue.component('v-scroller', VirtualList);
+// @ts-ignore
 Vue.use(VueTippy, {
   theme: 'steemcord',
   animation: 'perspective',

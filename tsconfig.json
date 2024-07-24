@@ -8,10 +8,6 @@
     "removeComments": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "typeRoots": ["@types"],
-    "paths": {
-      "*": ["node_modules/*", "@types/*"]
-    }
   },
   "include": ["src/**/*"],
   "exclude": ["src/view/**/*", "node_modules"]

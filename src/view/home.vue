@@ -87,8 +87,10 @@
 import ToggleInput from './components/ToggleInput.vue';
 import SteamHeader from './components/SteamHeader.vue';
 import DiscordHeader from './components/DiscordHeader.vue';
-const { remote, shell } = window.require('electron');
+const remote = window.require('@electron/remote');
+const { shell } = window.require('electron');
 const steam = remote.require('./steam');
+const { settings } = remote.require('./managers/settings');
 // @ts-ignore
 import ShowIcon from './assets/svg/show.svg';
 // @ts-ignore
@@ -175,6 +177,7 @@ export default {
       else steam.emitter.once('presence', () => (this.loggingIn = false));
     },
     logout() {
+      settings.delete('login');
       steam.user.logOff();
     }
   }

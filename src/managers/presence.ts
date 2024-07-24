@@ -8,7 +8,6 @@ import Collection from '@discordjs/collection';
 import Presence from '../presence';
 import { createRPC, destroyRPC, PresenceMetadata } from '../rpc';
 import { currentPresences as devPresences } from './dev';
-import fetch from 'node-fetch';
 import RPC from 'discord-rpc';
 import fs from 'fs';
 
