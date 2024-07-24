@@ -5,7 +5,7 @@ import { transpileModule } from 'typescript';
  
 export const vm = new NodeVM({
   console: 'inherit',
-  sandbox: { Presence, fetch },
+  sandbox: { Presence, fetch: null },
   require: {
     external: ['lodash']
   }
