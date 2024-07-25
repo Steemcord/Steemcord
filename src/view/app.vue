@@ -247,7 +247,7 @@ export default {
       settingsManager.update();
     },
     async logIn() {
-     this.$router.push('/home');
+     if (this.$router.currentRoute.path !== '/home') this.$router.push('/home');
     },
     abortAuth() {
       if (this.abortController)
