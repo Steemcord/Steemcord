@@ -18,7 +18,7 @@
       <h4>Rich Presence Data</h4>
       <table>
         <tbody>
-          <tr v-for="row in activeGamePresence" :key="row">
+          <tr v-for="row in activeGamePresence" :key="row.key">
             <td>{{ row.key }}</td>
             <td>{{ row.value }}</td>
           </tr>
