@@ -192,7 +192,7 @@ export default {
         flex-shrink 1
         flex-grow 1
         flex-direction column
-        justify-content flex-end
+        justify-content center
         margin-bottom -4px
         margin-right 4px
         .personanameandstatus_statusAndName_9U-hi
