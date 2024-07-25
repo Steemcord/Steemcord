@@ -52,6 +52,10 @@ export default {
       type: String,
       default: null
     },
+    error: {
+      type: Boolean,
+      default: false
+    },
   },
   // @ts-ignore
   emits: ['input'],
