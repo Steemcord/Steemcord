@@ -89,7 +89,11 @@ user.on('error', async err => {
   logger.error(err);
 });
 
-user.on('appUpdate', async () => {
+user.on('ownershipCached', async () => {
+  await updateApps();
+});
+
+user.on('changelist', async () => {
   await updateApps();
 });
 
@@ -106,7 +110,6 @@ user.on('loggedOn', async details => {
   user.setPersona(SteamUser.EPersonaState.Online);
   user.setUIMode(SteamUser.EClientUIMode.Web);
   emitter.emit('loggedOn', details);
-  await updateApps();
 });
 
 user.on('steamGuard', async (domain, callback, lastCodeWrong) => {
