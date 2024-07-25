@@ -16,13 +16,15 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-node@master
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
       - name: Restore CI Cache
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ runner.os }}-12-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-20-${{ hashFiles('**/yarn.lock') }}
       - name: Set Global Folder
         if: matrix.os == 'ubuntu-latest'
         run: |
