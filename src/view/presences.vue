@@ -34,14 +34,17 @@ export default {
       return this.$parent.apps ? this.$parent.apps.slice(0).sort((a, b) => a.name.normalize().localeCompare(b.name.normalize())) : null;
     },
     scrollItems () {
+      const header = { id: 'presences-header', type: 'header', text: 'Presences', refreshButton: true };
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       ((_) => this.ticker)();
 
       if (this.loading || !this.metadatas) return [
+          { ...header, refreshButton: false },
           { id: 'loading-status', type: 'no-games',
             text: 'Loading...' }
         ];
       else if (this.errorText) return [
+          { ...header, refreshButton: false },
           { id: 'loading-status', type: 'no-games',
             text: this.errorText },
           { id: 'loading-reload', type: 'reload-btn', text: 'Refresh' }
@@ -96,7 +99,7 @@ export default {
       }
 
       return [
-        { id: 'presences-header', type: 'header', text: 'Presences', refreshButton: true },
+        header,
         { id: 'search', type: 'search' },
         ...presences
       ];
