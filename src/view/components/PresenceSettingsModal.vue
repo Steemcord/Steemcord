@@ -89,7 +89,7 @@ export default {
       return;
     }
     this.metadata = this.rpc.getMetadata();
-    this.app = steam.apps ? steam.apps.find(app => app.appid === this.appID) : {};
+    this.app = steam.apps ? steam.apps.get(this.appID) : {};
     this.dev = dev.currentPresences.has(this.appID);
     this.loading = false;
   },

@@ -47,8 +47,8 @@
       </div>
       <div class="headerInfo">
         <div class="nameTag">
-          <span class="username">{{ user.username }}</span>
-          <span class="discriminator">#{{ user.discriminator }}</span>
+          <span class="username">{{ user.global_name || user.username }}</span>
+          <span v-if="user.discriminator !== '0'" class="discriminator">#{{ user.discriminator }}</span>
         </div>
         <div class="profileBadges">
           <!-- <div class="profileBadgeWrapper-1rGSsp">

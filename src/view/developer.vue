@@ -18,7 +18,7 @@
       <h4>Rich Presence Data</h4>
       <table>
         <tbody>
-          <tr v-for="row in activeGamePresence" :key="row">
+          <tr v-for="row in activeGamePresence" :key="row.key">
             <td>{{ row.key }}</td>
             <td>{{ row.value }}</td>
           </tr>
@@ -127,7 +127,7 @@ export default {
     },
     reloadPresences() {
       const apps = this.$parent.apps || [];
-      this.currentPresences = dev.currentPresences.array().map(p => ({ ...p, app: apps.find(app => app.appid === p.metadata.app_id) }));
+      this.currentPresences = dev.currentPresences.array().map(p => ({ ...p, app: apps.get(p.metadata.app_id) }));
       this.hasConflicts = !!presenceManager.appIDsInFolder.filter(appID => dev.currentPresences.has(appID)).length
         || presenceManager.appIDsInFolder.map(id => rpc.rpcClients.has(id)).includes(false);
     },

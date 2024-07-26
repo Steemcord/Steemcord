@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     apps() {
-      return this.$parent.apps ? this.$parent.apps.slice(0).sort((a, b) => a.name.normalize().localeCompare(b.name.normalize())) : null;
+      return this.$parent.apps ? this.$parent.apps : null;
     },
     availableUpdates () {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -43,7 +43,7 @@ export default {
 
       let presences = presenceManager.availableUpdates.array().map(metadata => {
         const enabled = settings.get(`apps.${metadata.app_id}.enabled`, true);
-        const app = this.apps ? this.apps.find(app => app.appid === metadata.app_id) : null;
+        const app = this.apps ? this.apps.get(metadata.app_id) : null;
         return {
           id: `u-${metadata.app_id}`,
           type: 'game',
@@ -69,7 +69,7 @@ export default {
       else if (this.updatesResults !== null)
         presences = this.updatesResults.map(({ string, original: metadata }) => {
           const enabled = settings.get(`apps.${metadata.app_id}.enabled`, true);
-          const app = this.apps ? this.apps.find(app => app.appid === metadata.app_id) : null;
+          const app = this.apps ? this.apps(metadata.app_id) : null;
           return {
             id: `u-${metadata.app_id}`,
             type: 'game',
@@ -102,7 +102,7 @@ export default {
       let presences = presenceManager.appIDsInFolder.length ? presenceManager.appIDsInFolder.map(id => {
           const metadata = settings.get(`apps.${id}.metadata`);
           const enabled = settings.get(`apps.${id}.enabled`, true);
-          const app = this.apps ? this.apps.find(app => app.appid === id) : null;
+          const app = this.apps ? this.apps.get(id) : null;
           return {
             id: `i-${id}`,
             type: 'game',
@@ -123,7 +123,7 @@ export default {
           };
         }) : [{ id: 'installed-none', type: 'no-games', text: 'No presences installed.' }];
 
-      let allGames = this.apps ? this.apps.map(app => ({
+      let allGames = this.apps ? this.apps.values().toArray().map((app: { appid: number }) => ({
         id: `h-${app.appid}`, type: 'game', class: 'white', app
       })) : null;
       
@@ -136,7 +136,7 @@ export default {
       if (this.results !== null)
         presences = this.results.length ? this.results.map(({ string, original: metadata }) => {
           const enabled = settings.get(`apps.${metadata.app_id}.enabled`, true);
-          const app = this.apps ? this.apps.find(app => app.appid === metadata.app_id) : null;
+          const app = this.apps ? this.apps.get(metadata.app_id) : null;
           return {
             id: `i-${metadata.app_id}`,
             type: 'game',
@@ -242,22 +242,25 @@ export default {
         this.updatesResults = null;
         return;
       }
+      function sanitize(str: string) {
+        return str.replace(/&/g, '&amp;').replace(/>/g, '&gt;').replace(/</g, '&lt;');
+      }
       query = query.replace(/&/g, '&amp;').replace(/>/g, '&gt;').replace(/</g, '&lt;');
       const installedMetadatas = this.getInstalledMetadatas();
       const updateMetadatas = presenceManager.availableUpdates.array();
       this.results = fuzzy.filter(query,
         installedMetadatas
-          .map(md => ({ ...md, safeName: md.name.replace(/&/g, '&amp;').replace(/>/g, '&gt;').replace(/</g, '&lt;') })),
+          .map(md => ({ ...md, safeName: sanitize(md.name) })),
         { pre: '<b>', post: '</b>', extract: md => md.safeName }
       );
       this.allGamesResults = this.apps ? fuzzy.filter(query,
-        this.apps
-          .map(app => ({ ...app, safeName: app.name.replace(/&/g, '&amp;').replace(/>/g, '&gt;').replace(/</g, '&lt;') })),
+        this.apps.values().toArray()
+          .map((app: { name: string }) => ({ ...app, safeName: sanitize(app.name) })),
         { pre: '<b>', post: '</b>', extract: app => app.safeName }
       ) : null;
       this.updatesResults = fuzzy.filter(query,
         updateMetadatas
-          .map(md => ({ ...md, safeName: md.name.replace(/&/g, '&amp;').replace(/>/g, '&gt;').replace(/</g, '&lt;') })),
+          .map(md => ({ ...md, safeName: sanitize(md.name) })),
         { pre: '<b>', post: '</b>', extract: md => md.safeName }
       );
     }

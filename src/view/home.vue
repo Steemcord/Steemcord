@@ -46,11 +46,15 @@
     <span>Steemcord is <a @click="openLink('https://github.com/Steemcord/Steemcord')">open-source software</a> and does not send sensitive information to 3rd party sites or any installed presences.</span>
   </div>
   <div v-else id="homePage" class="page">
-    <h3>Hello, {{ username }}!</h3>
-    <a class="router-link" @click="logout">
-      <LogoutIcon />
-      <span>Log Out</span>
-    </a>
+    <div class="header">
+      <h3>Hello, {{ username }}!</h3>
+      <div>
+        <a class="router-link" @click="logout">
+          <LogoutIcon />
+          <span>Log Out</span>
+        </a>
+      </div>
+    </div>
     <br>
     <br>
     <SteamHeader
@@ -151,7 +155,7 @@ export default {
       shell.openExternal(url);
     },
     getActiveApp() {
-      return this.$parent.apps && this.activeGame ? this.$parent.apps.find(app => app.appid === this.activeGame.appID ) : null;
+      return this.$parent.apps && this.activeGame && this.activeGame.appID ? this.$parent.apps.get(this.activeGame.appID) : null;
     },
     async login() {
       if (this.username) return;
@@ -276,6 +280,9 @@ export default {
       text-decoration underline
       cursor pointer
 #homePage
+  .header
+    & > *
+      display inline-block
   .arrow
     width 100%
     height 50px

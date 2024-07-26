@@ -73,7 +73,7 @@
       />
       <div class="text">
         <!-- eslint-disable-next-line vue/no-v-html -->
-        <span v-if="source.searchName" :title="source.app.name" v-html="source.searchName" />
+        <span v-if="source.searchName" :title="source.app.name" v-html="searchSanitize(source.searchName)" />
         <span v-else :title="source.app.name">{{ source.app.name }}</span>
         <span v-if="source.metadata" class="subtitle" :title="`${source.metadata.version} - ${source.metadata.author.name}`">
           {{ source.metadata.version }} - {{ source.metadata.author.name }}
@@ -209,6 +209,9 @@ export default Vue.extend({
       this.hasQuery = !!query.trim();
       this.page.search(query);
       if (force) this.$refs.input.value = query;
+    },
+    searchSanitize(str: string) {
+      return str.replace(/<b>&<\/b><b>a<\/b><b>m<\/b><b>p<\/b><b>;<\/b>/g, '<b>&amp;</b>').replace(/<b>&<\/b><b>g<\/b><b>t<\/b><b>;<\/b>/g, '<b>&gt;</b>').replace(/<b>&<\/b><b>l<\/b><b>t<\/b><b>;<\/b>/g, '<b>&lt;</b>');
     }
   }
 });

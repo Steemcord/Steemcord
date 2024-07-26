@@ -31,24 +31,27 @@ export default {
   },
   computed: {
     apps() {
-      return this.$parent.apps ? this.$parent.apps.slice(0).sort((a, b) => a.name.normalize().localeCompare(b.name.normalize())) : null;
+      return this.$parent.apps ? this.$parent.apps : null;
     },
     scrollItems () {
+      const header = { id: 'presences-header', type: 'header', text: 'Presences', refreshButton: true };
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       ((_) => this.ticker)();
 
       if (this.loading || !this.metadatas) return [
+          { ...header, refreshButton: false },
           { id: 'loading-status', type: 'no-games',
             text: 'Loading...' }
         ];
       else if (this.errorText) return [
+          { ...header, refreshButton: false },
           { id: 'loading-status', type: 'no-games',
             text: this.errorText },
           { id: 'loading-reload', type: 'reload-btn', text: 'Refresh' }
         ];
       
       let presences = this.metadatas.length ? this.metadatas.map(metadata => {
-          const app = this.apps ? this.apps.find(app => app.appid === metadata.app_id) : null;
+          const app = this.apps ? this.apps.get(metadata.app_id) : null;
           return {
             id: `s-${metadata.app_id}`,
             type: 'game',
@@ -72,7 +75,7 @@ export default {
 
       if (this.results) {
         presences = this.results.length ? this.results.map(({ string, original: metadata }) => {
-          const app = this.apps ? this.apps.find(app => app.appid === metadata.app_id) : null;
+          const app = this.apps ? this.apps.get(metadata.app_id) : null;
           return {
             id: `s-${metadata.app_id}`,
             type: 'game',
@@ -96,7 +99,7 @@ export default {
       }
 
       return [
-        { id: 'presences-header', type: 'header', text: 'Presences', refreshButton: true },
+        header,
         { id: 'search', type: 'search' },
         ...presences
       ];

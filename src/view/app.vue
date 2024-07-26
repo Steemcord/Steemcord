@@ -240,14 +240,14 @@ export default {
       return this.minimizeToTray ? remote.getCurrentWindow().hide() : remote.getCurrentWindow().close();
     },
     getActiveApp() {
-      return this.apps && this.activeGame ? this.apps.find(app => app.appid === this.activeGame.appID ) : null;
+      return this.apps && this.activeGame && this.activeGame.appID ? this.apps.get(this.activeGame.appID) : null;
     },
     updateSettings() {
       computedSettings.updateData(this);
       settingsManager.update();
     },
     async logIn() {
-     this.$router.push('/home');
+     if (this.$router.currentRoute.path !== '/home') this.$router.push('/home');
     },
     abortAuth() {
       if (this.abortController)

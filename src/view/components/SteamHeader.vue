@@ -192,7 +192,7 @@ export default {
         flex-shrink 1
         flex-grow 1
         flex-direction column
-        justify-content flex-end
+        justify-content center
         margin-bottom -4px
         margin-right 4px
         .personanameandstatus_statusAndName_9U-hi
@@ -202,8 +202,6 @@ export default {
           -webkit-app-region no-drag
           width 100%
           .ContextMenuButton
-            margin-top -4px
-            margin-bottom 4px
             opacity 0.5
             padding-top 2px
             padding-left 2px
@@ -226,7 +224,7 @@ export default {
           .personanameandstatus_playerName_1uxaf
             font-size 15px
             font-family "Motiva Sans", Arial, Helvetica, sans-serif
-            font-weight 300
+            font-weight 600
             transition color .94s ease-in-out
             text-shadow 1px 1px 4px #000
             white-space nowrap

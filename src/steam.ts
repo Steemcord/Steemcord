@@ -61,8 +61,7 @@ export let userName: string = null;
 export let userAvatar: string = null;
 export let accountName: string = null;
 export let steamID: string = null;
-export let apps: any = null;
-// export let apps: Array<OwnedApp> = null;
+export let apps: Map<string, { appid: string; name: string; img_icon_url?: string; }> | null = null;
 export let activeGame: MinimalGamePresence = null;
 export let steamGuardAvailable = true;
 
@@ -89,7 +88,11 @@ user.on('error', async err => {
   logger.error(err);
 });
 
-user.on('appUpdate', async () => {
+user.on('ownershipCached', async () => {
+  await updateApps();
+});
+
+user.on('changelist', async () => {
   await updateApps();
 });
 
@@ -106,7 +109,6 @@ user.on('loggedOn', async details => {
   user.setPersona(SteamUser.EPersonaState.Online);
   user.setUIMode(SteamUser.EClientUIMode.Web);
   emitter.emit('loggedOn', details);
-  await updateApps();
 });
 
 user.on('steamGuard', async (domain, callback, lastCodeWrong) => {
@@ -143,15 +145,16 @@ user.on('user', async (sid, data) => {
     // Wait till apps are populated
     while (apps === null) await wait(500);
 
-    const app = apps.find(app => app.appid === data.game_played_app_id);
+    const app = apps.get(data.game_played_app_id);
+    const appid = data.game_played_app_id;
 
     if (!app) {
       activeGame = { appID: 0, presence: [], presenceString: null };
       emitter.emit('presence', activeGame);
-      presenceLogger.warn(`Unknown app found (${data.game_played_app_id})`);
+      presenceLogger.warn(`Unknown app found (${appid})`);
     } else {
       activeGame = {
-        appID: data.game_played_app_id,
+        appID: appid,
         presence: data.rich_presence,
         presenceString: data.rich_presence_string || null
       };
@@ -164,9 +167,17 @@ user.on('user', async (sid, data) => {
 export async function updateApps(): Promise<void> {
   try {
     const data = await user.getUserOwnedApps(user.steamID, { includePlayedFreeGames: true, includeFreeSub: true });
+    let newApps = null;
     // There's currently a mismatch between node-steam-user and @types
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    apps = (data as any).apps;
+    const tempApps = (data as any).apps;
+    if (tempApps && tempApps.length) {
+      tempApps.sort((a: { name: string; }, b: { name: string; }) => a.name.normalize().localeCompare(b.name.normalize()));
+      newApps = new Map(
+        tempApps.map((app: { appid: number; }) => [app.appid, app])
+      );
+    }
+    apps = newApps;
     emitter.emit('appsUpdate', apps);
   } catch (err) {
     logger.error('Failed to get user apps', err);
