@@ -155,7 +155,7 @@ export default {
       shell.openExternal(url);
     },
     getActiveApp() {
-      return this.$parent.apps && this.activeGame ? this.$parent.apps.find(app => app.appid === this.activeGame.appID ) : null;
+      return this.$parent.apps && this.activeGame && this.activeGame.appID ? this.$parent.apps.find(app => app.appid === this.activeGame.appID ) : null;
     },
     async login() {
       if (this.username) return;
