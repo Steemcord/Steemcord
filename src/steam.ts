@@ -61,8 +61,7 @@ export let userName: string = null;
 export let userAvatar: string = null;
 export let accountName: string = null;
 export let steamID: string = null;
-export let apps: any = null;
-// export let apps: Array<OwnedApp> = null;
+export let apps: Map<string, { appid: string; name: string; img_icon_url?: string; }> | null = null;
 export let activeGame: MinimalGamePresence = null;
 export let steamGuardAvailable = true;
 
@@ -147,14 +146,15 @@ user.on('user', async (sid, data) => {
     while (apps === null) await wait(500);
 
     const app = apps.get(data.game_played_app_id);
+    const appid = data.game_played_app_id;
 
     if (!app) {
       activeGame = { appID: 0, presence: [], presenceString: null };
       emitter.emit('presence', activeGame);
-      presenceLogger.warn(`Unknown app found (${data.game_played_app_id})`);
+      presenceLogger.warn(`Unknown app found (${appid})`);
     } else {
       activeGame = {
-        appID: data.game_played_app_id,
+        appID: appid,
         presence: data.rich_presence,
         presenceString: data.rich_presence_string || null
       };
