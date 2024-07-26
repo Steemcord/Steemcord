@@ -24,12 +24,12 @@ export class TrayManager {
   constructor() {
     this.tray = new Tray(trayIcon);
     this.tray.setToolTip(app.name);
-    this.tray.on('right-click', () => this.update());
-    this.tray.on('click', () => win.show());
+    this.tray.on('right-click', () => win && this.update());
+    this.tray.on('click', () => win && win.show());
   }
 
   update(): void {
-    this.tray.setContextMenu(
+    this.tray.popUpContextMenu(
       Menu.buildFromTemplate([
         {
           icon:
