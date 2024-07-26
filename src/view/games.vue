@@ -242,22 +242,25 @@ export default {
         this.updatesResults = null;
         return;
       }
+      function sanitize(str: string) {
+        return str.replace(/&/g, '&amp;').replace(/>/g, '&gt;').replace(/</g, '&lt;');
+      }
       query = query.replace(/&/g, '&amp;').replace(/>/g, '&gt;').replace(/</g, '&lt;');
       const installedMetadatas = this.getInstalledMetadatas();
       const updateMetadatas = presenceManager.availableUpdates.array();
       this.results = fuzzy.filter(query,
         installedMetadatas
-          .map(md => ({ ...md, safeName: md.name.replace(/&/g, '&amp;').replace(/>/g, '&gt;').replace(/</g, '&lt;') })),
+          .map(md => ({ ...md, safeName: sanitize(md.name) })),
         { pre: '<b>', post: '</b>', extract: md => md.safeName }
       );
       this.allGamesResults = this.apps ? fuzzy.filter(query,
         this.apps.values().toArray()
-          .map((app: { name: string }) => ({ ...app, safeName: app.name.replace(/&/g, '&amp;').replace(/>/g, '&gt;').replace(/</g, '&lt;') })),
+          .map((app: { name: string }) => ({ ...app, safeName: sanitize(app.name) })),
         { pre: '<b>', post: '</b>', extract: app => app.safeName }
       ) : null;
       this.updatesResults = fuzzy.filter(query,
         updateMetadatas
-          .map(md => ({ ...md, safeName: md.name.replace(/&/g, '&amp;').replace(/>/g, '&gt;').replace(/</g, '&lt;') })),
+          .map(md => ({ ...md, safeName: sanitize(md.name) })),
         { pre: '<b>', post: '</b>', extract: md => md.safeName }
       );
     }
