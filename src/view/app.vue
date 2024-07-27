@@ -659,6 +659,8 @@ body, html
         &.subtitle
           font-size 14px
           opacity .5
+    .buttons-wrap > .buttons
+      margin-left: 5px
     .buttons
       display flex
       vertical-align middle
@@ -666,6 +668,8 @@ body, html
       opacity 0
       flex-shrink 0
       transition opacity .2s ease
+      &.buttons-core
+        opacity 1
       .icon-btn
         width 24px
         height 24px
