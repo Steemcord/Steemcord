@@ -7,7 +7,7 @@
       <GitHubLogo />
       <span>GitHub</span>
     </a>
-    <a class="router-link" @click="openLink('https://patreon.com/Snazzah')">
+    <a class="router-link" @click="openLink('https://github.com/sponsors/Snazzah')">
       <DonateIcon />
       <span>Sponsor this project</span>
     </a>
@@ -29,6 +29,7 @@
           <span v-if="c.subtitle" class="subtitle">{{ c.subtitle }}</span>
         </div>
         <GitHubLogo
+          v-if="c.github"
           v-tippy="{ arrow: true }"
           content="GitHub"
           @click="openLink(`https://github.com/${c.github}`)"
