@@ -23,7 +23,9 @@
   </h4>
   <a 
     v-else-if="source.type === 'reload-btn'"
-    class="router-link" @click="page.reload"
+    class="router-link"
+    :class="source.class || ''"
+    @click="page.reload"
   >
     <RefreshIcon />
     <span>{{ source.text }}</span>

@@ -551,6 +551,8 @@ body, html
     cursor pointer
     background-color #0000
     transition background-color .2s ease
+    &.disabled
+      opacity: 0.5
     &.login
       margin 16px 10px
       padding 15px 8px

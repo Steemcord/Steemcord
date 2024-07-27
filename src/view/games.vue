@@ -27,7 +27,7 @@ export default {
       showHiddenGames: false,
       scrollItem: ScrollItem,
       lockedPresences: new Collection(),
-
+      checkingForUpdates: false,
       results: null,
       allGamesResults: null,
       updatesResults: null,
@@ -37,7 +37,7 @@ export default {
     apps() {
       return this.$parent.apps ? this.$parent.apps : null;
     },
-    availableUpdates () {
+    availableUpdates() {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       ((_) => this.ticker)();
 
@@ -93,7 +93,7 @@ export default {
       return presenceManager.availableUpdates.size ? [
         { id: 'updates-header', type: 'header', header: 'h4', text: `Updates Available (${presences.length.toLocaleString()})`, refreshButton: true },
         ...presences
-      ] : [{ id: 'updates-check', type: 'reload-btn', text: 'Check For Updates' }];
+      ] : [{ id: 'updates-check', type: 'reload-btn', text: 'Check For Updates', class: this.checkingForUpdates ? 'disabled' : '' }];
     },
     scrollItems() {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -225,7 +225,10 @@ export default {
     },
     async reload() {
       console.info('Reloading presence updates');
+      this.checkingForUpdates = true;
+      this.ticker = Date.now();
       await presenceManager.checkForUpdates();
+      this.checkingForUpdates = false;
       this.ticker = Date.now();
     },
     presenceSettings(appID: number) {
