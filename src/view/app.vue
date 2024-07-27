@@ -172,6 +172,7 @@ export default {
       currentPresence: rpc.lastPresence,
       presenceAssetIDs: rpc.lastPresenceAssetIDs,
       discordUser: presenceManager.rpc ? presenceManager.rpc.user : null,
+      discordStatus: presenceManager.rpcConnected ? 2 : 3,
       nextUpdateAvailable: updater.updateAvailable,
       ...computedSettings.fillData()
     };
@@ -185,8 +186,6 @@ export default {
     }
   },
   created(): void {
-    this.discordStatus = presenceManager.rpcConnected ? 2 : 3;
-
     const appsEventBind = apps => this.apps = apps;
     const presenceEventBind = presence => {
       this.userName = steam.userName;
