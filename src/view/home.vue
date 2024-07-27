@@ -56,7 +56,6 @@
       </div>
     </div>
     <br>
-    <br>
     <SteamHeader
       :username="username"
       :avatar="avatar"

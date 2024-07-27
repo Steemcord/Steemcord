@@ -396,7 +396,7 @@ body, html
       &:hover
         opacity 1
     &:nth-child(1)
-      margin-top 1em
+      margin-top 0.4em
   h4
     font-size 24px
     .header-icon-btn
@@ -583,9 +583,9 @@ body, html
     .page
       padding 1em
     .page-scroller
-      padding 15px
+      padding 1em
       overflow hidden auto
-      height calc(100% - 30px)
+      height calc(100% - 32px)
   .no-games
     font-weight 300
     font-size 14px
@@ -682,7 +682,7 @@ body, html
   [role="listitem"]
     display flex
     height 60px
-    padding 4px
+    padding 4px 0
     justify-content center
     flex-direction column
     h3, h4
