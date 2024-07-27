@@ -75,6 +75,8 @@
       :type="isActiveGame && currentPresence ? 'playing' : 'normal'"
       :richpresence="isActiveGame ? currentPresence : null"
       :app="isActiveGame ? getActiveApp() : null"
+      :large-image-url="presenceAssetIDs && presenceAssetIDs.large_image ? `https://cdn.discordapp.com/app-assets/${presenceAssetIDs.client}/${presenceAssetIDs.large_image}.png` : null"
+      :small-image-url="presenceAssetIDs && presenceAssetIDs.small_image ? `https://cdn.discordapp.com/app-assets/${presenceAssetIDs.client}/${presenceAssetIDs.small_image}.png` : null"
     />
     <a
       v-if="isActiveGame && (activeGame.presenceString || activeGame.presence.length) && !currentPresence"
@@ -145,6 +147,9 @@ export default {
     },
     currentPresence() {
       return this.$parent.currentPresence;
+    },
+    presenceAssetIDs() {
+      return this.$parent.presenceAssetIDs;
     },
     steamID() {
       return this.username ? steam.steamID : null;

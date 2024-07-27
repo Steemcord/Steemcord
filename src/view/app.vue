@@ -170,6 +170,7 @@ export default {
       userName: steam.userName,
       activeGame: steam.activeGame,
       currentPresence: rpc.lastPresence,
+      presenceAssetIDs: rpc.lastPresenceAssetIDs,
       discordUser: presenceManager.rpc ? presenceManager.rpc.user : null,
       nextUpdateAvailable: updater.updateAvailable,
       ...computedSettings.fillData()
@@ -201,7 +202,10 @@ export default {
       this.discordStatus = 3;
       this.discordUser = null;
     };
-    const rpcBind = () => this.currentPresence = rpc.lastPresence;
+    const rpcBind = () => {
+      this.currentPresence = rpc.lastPresence;
+      this.presenceAssetIDs = rpc.lastPresenceAssetIDs;
+    };
     const updateBind = ver => this.nextUpdateAvailable = ver;
     const debugBind = message => console.log('[steam]', message);
 
