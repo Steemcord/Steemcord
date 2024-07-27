@@ -24,6 +24,10 @@
           </tr>
         </tbody>
       </table>
+      <a class="router-link" @click="viewLocaleStrings">
+        <AboutIcon />
+        <span>View Localization Strings</span>
+      </a>
     </div>
 
     <h4>
@@ -101,10 +105,12 @@ import RevertIcon from './assets/svg/revert.svg';
 import DevToolsIcon from './assets/svg/devtools.svg';
 // @ts-ignore
 import SettingsIcon from './assets/svg/settings.svg';
+// @ts-ignore
+import AboutIcon from './assets/svg/about.svg';
 
 export default {
   components: {
-    FolderIcon, RefreshIcon, TrashIcon, RevertIcon, DevToolsIcon, SettingsIcon
+    FolderIcon, RefreshIcon, TrashIcon, RevertIcon, DevToolsIcon, SettingsIcon, AboutIcon
   },
   data() {
     return {
@@ -159,6 +165,9 @@ export default {
     },
     openDevTools() {
       remote.getCurrentWindow().webContents.openDevTools();
+    },
+    viewLocaleStrings() {
+      if (this.$parent.activeGame && this.$parent.activeGame.appID !== 0) shell.openExternal(`https://steamdb.info/app/${this.$parent.activeGame.appID}/localization/`);
     }
   }
 };
