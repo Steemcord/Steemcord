@@ -75,7 +75,7 @@
     "pkg": "yarn before-pkg && npx electron-builder"
   },
   "dependencies": {
-    "@discordjs/collection": "^0.1.6",
+    "@discordjs/collection": "^2.1.0",
     "@electron/remote": "^2.1.2",
     "abort-controller": "^3.0.0",
     "auto-launch": "^5.0.6",

@@ -4,7 +4,7 @@ import { settings } from './settings';
 import EventEmitter from 'eventemitter3';
 import { getPresenceFromCode } from '../sandbox';
 import { STEEMCORD_CLIENT_ID } from '../constants';
-import Collection from '@discordjs/collection';
+import { Collection } from '@discordjs/collection';
 import Presence from '../presence';
 import { createRPC, destroyRPC, PresenceMetadata } from '../rpc';
 import { currentPresences as devPresences } from './dev';
@@ -141,7 +141,7 @@ export async function autoUpdatePresences(initial = false): Promise<void> {
   await checkForUpdates();
   if (settings.get('autoUpdatePresences', false)) {
     const updateNames: string[] = [];
-    await Promise.all(availableUpdates.array().map(async metadata => {
+    await Promise.all(Array.from(availableUpdates.values()).map(async metadata => {
       try {
         const tsCode = await fetch(metadata.script_url).then(r => r.text());
         console.log('Updating presence automatically', metadata.app_id);
@@ -161,7 +161,7 @@ export async function autoUpdatePresences(initial = false): Promise<void> {
   } else if (!initial && !updatesExistedLastPoll && availableUpdates.size && settings.get('presenceNotifications', true))
     new Notification({
       title: `${availableUpdates.size.toLocaleString()} presence(s) are ready to be updated.`,
-      body: availableUpdates.array().map(md => md.name).join(', '),
+      body: Array.from(availableUpdates.values()).map(md => md.name).join(', '),
       icon: '../resources/app/assets/icon.ico'
     }).show();
 
