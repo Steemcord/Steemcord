@@ -84,13 +84,13 @@
               v-tippy="{ arrow: true }"
               class="assetsLargeImage"
               :content="richpresence.largeImageText"
-              :src="largeImageURL || (metadata ? metadata.icon : null ) || (app ? app.img_icon_url : null ) || largeImagePlaceholder"
+              :src="largeImageUrl || (metadata ? metadata.icon : null ) || (app ? app.img_icon_url : null ) || largeImagePlaceholder"
               :class="richpresence.smallImageKey ? 'maskLargeImage' : ''"
             >
             <img
               v-else
               class="assetsLargeImage"
-              :src="largeImageURL || (metadata ? metadata.icon : null ) || (app ? app.img_icon_url : null ) || largeImagePlaceholder"
+              :src="largeImageUrl || (metadata ? metadata.icon : null ) || (app ? app.img_icon_url : null ) || largeImagePlaceholder"
               :class="richpresence.smallImageKey ? 'maskLargeImage' : ''"
             >
             <img
@@ -98,12 +98,12 @@
               v-tippy="{ arrow: true }"
               :content="richpresence.smallImageText"
               class="assetsSmallImage"
-              :src="smallImageURL || smallImagePlaceholder"
+              :src="smallImageUrl || smallImagePlaceholder"
             >
             <img
               v-else-if="richpresence.smallImageKey"
               class="assetsSmallImage"
-              :src="smallImageURL || smallImagePlaceholder"
+              :src="smallImageUrl || smallImagePlaceholder"
             >
           </div>
           <div class="contentImagesProfile">
@@ -164,11 +164,11 @@ export default {
       type: String,
       default: 'normal'
     },
-    largeImageURL: {
+    largeImageUrl: {
       type: String,
       default: ''
     },
-    smallImageURL: {
+    smallImageUrl: {
       type: String,
       default: ''
     },

@@ -75,6 +75,8 @@
       :type="isActiveGame && currentPresence ? 'playing' : 'normal'"
       :richpresence="isActiveGame ? currentPresence : null"
       :app="isActiveGame ? getActiveApp() : null"
+      :large-image-url="presenceAssetIDs ? parseImageKey(presenceAssetIDs.large_image) : null"
+      :small-image-url="presenceAssetIDs ? parseImageKey(presenceAssetIDs.small_image) : null"
     />
     <a
       v-if="isActiveGame && (activeGame.presenceString || activeGame.presence.length) && !currentPresence"
@@ -146,6 +148,9 @@ export default {
     currentPresence() {
       return this.$parent.currentPresence;
     },
+    presenceAssetIDs() {
+      return this.$parent.presenceAssetIDs;
+    },
     steamID() {
       return this.username ? steam.steamID : null;
     },
@@ -156,6 +161,11 @@ export default {
     },
     getActiveApp() {
       return this.$parent.apps && this.activeGame && this.activeGame.appID ? this.$parent.apps.get(this.activeGame.appID) : null;
+    },
+    parseImageKey(imageKey: string) {
+      if (!this.$parent.presenceAssetIDs || !imageKey) return null;
+      if (imageKey.startsWith('mp:')) return `https://media.discordapp.net/${imageKey.slice(3)}`;
+      else return `https://cdn.discordapp.com/app-assets/${this.$parent.presenceAssetIDs.client}/${imageKey}.png`;
     },
     async login() {
       if (this.username) return;
