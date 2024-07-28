@@ -75,8 +75,8 @@
       :type="isActiveGame && currentPresence ? 'playing' : 'normal'"
       :richpresence="isActiveGame ? currentPresence : null"
       :app="isActiveGame ? getActiveApp() : null"
-      :large-image-url="presenceAssetIDs && presenceAssetIDs.large_image ? `https://cdn.discordapp.com/app-assets/${presenceAssetIDs.client}/${presenceAssetIDs.large_image}.png` : null"
-      :small-image-url="presenceAssetIDs && presenceAssetIDs.small_image ? `https://cdn.discordapp.com/app-assets/${presenceAssetIDs.client}/${presenceAssetIDs.small_image}.png` : null"
+      :large-image-url="parseImageKey(presenceAssetIDs.large_image)"
+      :small-image-url="parseImageKey(presenceAssetIDs.small_image)"
     />
     <a
       v-if="isActiveGame && (activeGame.presenceString || activeGame.presence.length) && !currentPresence"
@@ -161,6 +161,12 @@ export default {
     },
     getActiveApp() {
       return this.$parent.apps && this.activeGame && this.activeGame.appID ? this.$parent.apps.get(this.activeGame.appID) : null;
+    },
+    parseImageKey(imageKey: string) {
+      if (!this.$parent.presenceAssetIDs || !imageKey) return null;
+      if (imageKey.startsWith('mp:')) return `https://media.discordapp.net/${imageKey.slice(3)}`;
+      else `https://cdn.discordapp.com/app-assets/${this.$parent.presenceAssetIDs.client}/${imageKey}.png`;
+      return null;
     },
     async login() {
       if (this.username) return;
