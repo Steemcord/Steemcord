@@ -75,8 +75,8 @@
       :type="isActiveGame && currentPresence ? 'playing' : 'normal'"
       :richpresence="isActiveGame ? currentPresence : null"
       :app="isActiveGame ? getActiveApp() : null"
-      :large-image-url="parseImageKey(presenceAssetIDs.large_image)"
-      :small-image-url="parseImageKey(presenceAssetIDs.small_image)"
+      :large-image-url="presenceAssetIDs ? parseImageKey(presenceAssetIDs.large_image) : null"
+      :small-image-url="presenceAssetIDs ? parseImageKey(presenceAssetIDs.small_image) : null"
     />
     <a
       v-if="isActiveGame && (activeGame.presenceString || activeGame.presence.length) && !currentPresence"
@@ -165,8 +165,7 @@ export default {
     parseImageKey(imageKey: string) {
       if (!this.$parent.presenceAssetIDs || !imageKey) return null;
       if (imageKey.startsWith('mp:')) return `https://media.discordapp.net/${imageKey.slice(3)}`;
-      else `https://cdn.discordapp.com/app-assets/${this.$parent.presenceAssetIDs.client}/${imageKey}.png`;
-      return null;
+      else return `https://cdn.discordapp.com/app-assets/${this.$parent.presenceAssetIDs.client}/${imageKey}.png`;
     },
     async login() {
       if (this.username) return;
