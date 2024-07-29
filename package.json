@@ -120,7 +120,7 @@
     "stylus": "^0.63.0",
     "stylus-loader": "^8.1.0",
     "ts-devscript": "^1.1.1",
-    "ts-loader": "^8.4.0",
+    "ts-loader": "^9.5.1",
     "typed-emitter": "^2.1.0",
     "unzipper": "^0.12.2",
     "url-loader": "^4.1.1",
