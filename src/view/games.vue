@@ -126,13 +126,13 @@ export default {
       let allGames = this.apps ? this.apps.values().toArray().map((app: { appid: number }) => ({
         id: `h-${app.appid}`, type: 'game', class: 'white', app
       })) : null;
-      
+
       if (this.allGamesResults !== null)
         allGames = this.allGamesResults.map(({ string, original: app }) => ({
           id: `h-${app.appid}`, type: 'game', class: 'white', app,
           searchName: string
         }));
-      
+
       if (this.results !== null)
         presences = this.results.length ? this.results.map(({ string, original: metadata }) => {
           const enabled = settings.get(`apps.${metadata.app_id}.enabled`, true);

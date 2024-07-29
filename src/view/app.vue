@@ -216,8 +216,8 @@ export default {
     presenceManager.emitter.on('rpcError', disconnectBind);
     rpc.emitter.on('update', rpcBind);
     presenceManager.emitter.on('update', updateBind);
-  
-    const unloadBind = () => { 
+
+    const unloadBind = () => {
       steam.emitter.removeListener('appsUpdate', appsEventBind);
       steam.emitter.removeListener('presence', presenceEventBind);
       steam.user.removeListener('debug', debugBind);
@@ -600,7 +600,7 @@ body, html
     margin 2em 0
   .game
     margin .5em
-    margin-right 0  
+    margin-right 0
     display flex
     vertical-align middle
     align-items center

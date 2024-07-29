@@ -49,7 +49,7 @@ export default {
             text: this.errorText },
           { id: 'loading-reload', type: 'reload-btn', text: 'Refresh' }
         ];
-      
+
       let presences = this.metadatas.length ? this.metadatas.map(metadata => {
           const app = this.apps ? this.apps.get(metadata.app_id) : null;
           return {

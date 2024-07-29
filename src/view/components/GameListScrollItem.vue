@@ -21,7 +21,7 @@
   >
     {{ source.text }}
   </h4>
-  <a 
+  <a
     v-else-if="source.type === 'reload-btn'"
     class="router-link"
     :class="source.class || ''"
@@ -199,7 +199,7 @@ export default Vue.extend({
       required: true
     },
   },
-  data () {
+  data() {
     return {
       page: this.$parent.$parent.$parent,
       hasQuery: false

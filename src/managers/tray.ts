@@ -52,10 +52,10 @@ export class TrayManager {
         {
           type: 'separator'
         },
-				{
-					label: 'GitHub Repo',
-					click: () => shell.openExternal('https://github.com/Steemcord/Steemcord')
-				},
+        {
+          label: 'GitHub Repo',
+          click: () => shell.openExternal('https://github.com/Steemcord/Steemcord')
+        },
         {
           type: 'separator'
         },

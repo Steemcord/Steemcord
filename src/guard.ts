@@ -9,7 +9,7 @@ import * as remote from '@electron/remote/main';
 
 export let win: BrowserWindow;
 
-export async function prompt(domain: string | null, failedBefore: boolean): Promise<string|null> {
+export async function prompt(domain: string | null, failedBefore: boolean): Promise<string | null> {
   return new Promise(resolve => {
     if (win) return;
     logger.info(`Starting guard (domain=${domain}, failedBefore=${failedBefore})`);
@@ -37,12 +37,12 @@ export async function prompt(domain: string | null, failedBefore: boolean): Prom
     remote.enable(win.webContents);
 
     win.loadURL(GUARD_APP_URL);
-  
+
     win.once('ready-to-show', () => {
       win.show();
       win.setMenu(null);
     });
-  
+
     ipcMain.once('guard-callback', (_, code: string | null) => {
       if (completed) return;
       completed = true;
@@ -51,12 +51,12 @@ export async function prompt(domain: string | null, failedBefore: boolean): Prom
       win = null;
       resolve(code ? code.toLowerCase() : null);
     });
-  
+
     ipcMain.once('guard-ready', () => {
       logger.info('Ready');
       win.webContents.send('guard-init', { domain, failedBefore });
     });
-  
+
     win.on('closed', () => {
       if (completed) return;
       completed = true;

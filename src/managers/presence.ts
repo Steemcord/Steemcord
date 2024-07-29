@@ -33,7 +33,7 @@ export function reloadFolderIDs(): number[] {
 export async function start(): Promise<void> {
   // Create presence folder if it doesn't exist
   fs.access(join(app.getPath('userData'), 'presences'), fs.constants.F_OK, err => {
-    if(err) fs.mkdirSync(presenceFolder);
+    if (err) fs.mkdirSync(presenceFolder);
   });
 
   await connect();
@@ -105,14 +105,14 @@ export async function installPresenceFromURL(metadataURL: string): Promise<void>
 
   if (!metadata.update_url)
     metadata.update_url = metadataURL;
-  
+
   // Assume if teh URL ends with /metadata.json that theres a script in the same folder
   if (!metadata.script_url && metadataURL.endsWith('/metadata.json'))
     metadata.script_url = metadataURL.replace('/metadata.json', '/index.ts');
-  
+
   if (!metadata.script_url)
     throw new Error('Couldn\'t find the script URL to go with this metadata.');
-  
+
   const tsCode = await fetch(metadata.script_url).then(r => r.text());
   return installPresence(metadata, tsCode);
 }
@@ -174,4 +174,4 @@ export async function startUpdateInterval(): Promise<void> {
   updateInterval = setInterval(() => autoUpdatePresences(), settings.get('presencePollInterval', 60 * 60 * 1000) as number);
 }
 
-app.once('will-quit', () => { if(updateInterval) clearInterval(updateInterval); });
+app.once('will-quit', () => { if (updateInterval) clearInterval(updateInterval); });

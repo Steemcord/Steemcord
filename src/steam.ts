@@ -15,7 +15,7 @@ import { settings } from './managers/settings';
 import fs from 'fs';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-class AnyTypedEmitter extends (EventEmitter1 as new () => TypedEmitter<any>) {}
+class AnyTypedEmitter extends (EventEmitter1 as new () => TypedEmitter<any>) { }
 
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,7 +31,7 @@ export interface MinimalGamePresence {
   presence: Array<{ key: string, value: string }>;
   presenceString?: string;
 }
-  
+
 // Prepare steam user data folder
 const dataFolder = join(app.getPath('userData'), 'steam-user');
 try {
@@ -214,6 +214,6 @@ export async function autoLogin(): Promise<void> {
 }
 
 app.once(
-	'will-quit',
-	async () => user.logOff()
+  'will-quit',
+  async () => user.logOff()
 );
