@@ -147,7 +147,9 @@ export default {
       } catch (e) {
         this.lockedPresences.delete(metadata.app_id);
         console.error('Faled to install presence %s', metadata.app_id, e);
-        alert(`Failed to install ${metadata.name}.\n${e}`);
+        remote.dialog.showMessageBox({
+          message: `Failed to install ${metadata.name}.\n${e}`
+        });
       }
     },
     search(query: string) {

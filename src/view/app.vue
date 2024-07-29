@@ -262,7 +262,11 @@ export default {
       this.discordStatus = 1;
       if (presenceManager.rpc) await presenceManager.rpc.destroy();
       const success = await presenceManager.connect();
-      if (!success) alert('Couldn\'t connect to Discord. Make sure that the client is running.');
+      if (!success) {
+        remote.dialog.showMessageBox({
+          message: 'Couldn\'t connect to Discord. Make sure that the client is running.'
+        });
+      }
     },
     updateApp() {
       updater.updater.quitAndInstall(true, true);

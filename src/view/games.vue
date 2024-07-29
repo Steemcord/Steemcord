@@ -220,7 +220,9 @@ export default {
       } catch (e) {
         this.lockedPresences.delete(appID);
         console.error('Faled to update presence %s', appID, e);
-        alert(`Failed to update ${metadata.name}.\n${e}`);
+        remote.dialog.showMessageBox({
+          message: `Failed to update ${metadata.name}.\n${e}`
+        });
       }
     },
     async reload() {

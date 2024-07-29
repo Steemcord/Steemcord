@@ -168,8 +168,16 @@ export default {
     },
     async login() {
       if (this.username) return;
-      if (!this.$refs.accountName.value) return alert('Please enter an account name.');
-      if (!this.$refs.password.value) return alert('Please enter a password.');
+      if (!this.$refs.accountName.value) {
+        return remote.dialog.showMessageBox({
+          message: 'Please enter an account name.'
+        });
+      }
+      if (!this.$refs.password.value) {
+        return remote.dialog.showMessageBox({
+          message: 'Please enter a password.'
+        });
+      }
       this.loggingIn = true;
       const { event, result } = await steam.logOn({
         accountName: this.$refs.accountName.value.toLowerCase(),
@@ -181,7 +189,9 @@ export default {
         const error = result[0];
         const errorType = error.message;
         console.log('failed to log in', { error, errorType });
-        alert(this.errorDescriptions[errorType] || 'Failed to log in: ' + errorType);
+        remote.dialog.showMessageBox({
+          message: this.errorDescriptions[errorType] || 'Failed to log in: ' + errorType
+        });
         if (errorType === 'InvalidPassword') this.$refs.password.value = '';
         this.$refs.password.focus();
       }
