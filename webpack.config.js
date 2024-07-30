@@ -42,8 +42,8 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader'
       },
-			{
-				test: /\.(woff|woff2|ttf|png|jpe?g|gif)$/,
+      {
+        test: /\.(woff|woff2|ttf|png|jpe?g|gif)$/,
         use: [
           {
             loader: 'url-loader',
@@ -52,7 +52,7 @@ module.exports = {
             },
           },
         ],
-			},
+      },
       {
         test: /\.svg$/,
         loader: 'vue-svg-loader',

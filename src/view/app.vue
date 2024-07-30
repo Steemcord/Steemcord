@@ -172,6 +172,7 @@ export default {
       currentPresence: rpc.lastPresence,
       presenceAssetIDs: rpc.lastPresenceAssetIDs,
       discordUser: presenceManager.rpc ? presenceManager.rpc.user : null,
+      discordStatus: presenceManager.rpcConnected ? 2 : 3,
       nextUpdateAvailable: updater.updateAvailable,
       ...computedSettings.fillData()
     };
@@ -185,8 +186,6 @@ export default {
     }
   },
   created(): void {
-    this.discordStatus = presenceManager.rpcConnected ? 2 : 3;
-
     const appsEventBind = apps => this.apps = apps;
     const presenceEventBind = presence => {
       this.userName = steam.userName;
@@ -217,8 +216,8 @@ export default {
     presenceManager.emitter.on('rpcError', disconnectBind);
     rpc.emitter.on('update', rpcBind);
     presenceManager.emitter.on('update', updateBind);
-  
-    const unloadBind = () => { 
+
+    const unloadBind = () => {
       steam.emitter.removeListener('appsUpdate', appsEventBind);
       steam.emitter.removeListener('presence', presenceEventBind);
       steam.user.removeListener('debug', debugBind);
@@ -263,7 +262,11 @@ export default {
       this.discordStatus = 1;
       if (presenceManager.rpc) await presenceManager.rpc.destroy();
       const success = await presenceManager.connect();
-      if (!success) alert('Couldn\'t connect to Discord. Make sure that the client is running.');
+      if (!success) {
+        remote.dialog.showMessageBox({
+          message: 'Couldn\'t connect to Discord. Make sure that the client is running.'
+        });
+      }
     },
     updateApp() {
       updater.updater.quitAndInstall(true, true);
@@ -396,7 +399,7 @@ body, html
       &:hover
         opacity 1
     &:nth-child(1)
-      margin-top 1em
+      margin-top 0.4em
   h4
     font-size 24px
     .header-icon-btn
@@ -551,6 +554,8 @@ body, html
     cursor pointer
     background-color #0000
     transition background-color .2s ease
+    &.disabled
+      opacity: 0.5
     &.login
       margin 16px 10px
       padding 15px 8px
@@ -583,9 +588,9 @@ body, html
     .page
       padding 1em
     .page-scroller
-      padding 15px
+      padding 1em
       overflow hidden auto
-      height calc(100% - 30px)
+      height calc(100% - 32px)
   .no-games
     font-weight 300
     font-size 14px
@@ -595,7 +600,7 @@ body, html
     margin 2em 0
   .game
     margin .5em
-    margin-right 0  
+    margin-right 0
     display flex
     vertical-align middle
     align-items center
@@ -659,6 +664,8 @@ body, html
         &.subtitle
           font-size 14px
           opacity .5
+    .buttons-wrap > .buttons
+      margin-left: 5px
     .buttons
       display flex
       vertical-align middle
@@ -666,6 +673,8 @@ body, html
       opacity 0
       flex-shrink 0
       transition opacity .2s ease
+      &.buttons-core
+        opacity 1
       .icon-btn
         width 24px
         height 24px
@@ -682,7 +691,7 @@ body, html
   [role="listitem"]
     display flex
     height 60px
-    padding 4px
+    padding 4px 0
     justify-content center
     flex-direction column
     h3, h4

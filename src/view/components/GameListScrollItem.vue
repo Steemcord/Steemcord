@@ -21,9 +21,11 @@
   >
     {{ source.text }}
   </h4>
-  <a 
+  <a
     v-else-if="source.type === 'reload-btn'"
-    class="router-link" @click="page.reload"
+    class="router-link"
+    :class="source.class || ''"
+    @click="page.reload"
   >
     <RefreshIcon />
     <span>{{ source.text }}</span>
@@ -80,62 +82,73 @@
         </span>
       </div>
     </div>
-    <div class="buttons">
-      <CheckboxOnIcon
-        v-if="source.installed && !source.class"
-        v-tippy="{ arrow: true, boundary: 'viewport' }"
-        class="icon-btn"
-        content="Disable"
-        @click="page.toggleEnabled(source.app.appid)"
-      />
-      <CheckboxOffIcon
-        v-else-if="source.installed && source.class === 'white'"
-        v-tippy="{ arrow: true, boundary: 'viewport' }"
-        class="icon-btn"
-        content="Enable"
-        @click="page.toggleEnabled(source.app.appid)"
-      />
-      <UpdateIcon
-        v-if="source.update"
-        v-tippy="{ arrow: true, boundary: 'viewport' }"
-        class="icon-btn"
-        content="Update"
-        @click="page.updatePresence(source.app.appid)"
-      />
-      <InstallIcon
-        v-if="source.store"
-        v-tippy="{ arrow: true, boundary: 'viewport' }"
-        class="icon-btn"
-        content="Install Presence"
-        @click="page.installPresence(source.metadata)"
-      />
-      <SettingsIcon
-        v-if="source.metadata && source.metadata.settings && !source.store"
-        v-tippy="{ arrow: true, boundary: 'viewport' }"
-        class="icon-btn"
-        content="Settings"
-        @click="page.presenceSettings(source.app.appid)"
-      />
-      <SteamLogo
-        v-tippy="{ arrow: true, boundary: 'viewport' }"
-        class="icon-btn"
-        content="Open Steam Store Page"
-        @click="openLink(`https://store.steampowered.com/app/${source.app.appid.toString()}/`)"
-      />
-      <ClipboardIcon
-        v-if="devMode"
-        v-tippy="{ arrow: true, boundary: 'viewport' }"
-        class="icon-btn"
-        content="Copy App ID"
-        @click="copyToClipboard(source.app.appid.toString())"
-      />
-      <TrashIcon
-        v-if="source.installed"
-        v-tippy="{ arrow: true, boundary: 'viewport' }"
-        class="icon-btn"
-        content="Uninstall"
-        @click="page.uninstallPresence(source.app.appid)"
-      />
+    <div class="buttons-wrap">
+      <div class="buttons">
+        <SettingsIcon
+          v-if="source.metadata && source.metadata.settings && !source.store"
+          v-tippy="{ arrow: true, boundary: 'viewport' }"
+          class="icon-btn"
+          content="Settings"
+          @click="page.presenceSettings(source.app.appid)"
+        />
+        <SteamLogo
+          v-tippy="{ arrow: true, boundary: 'viewport' }"
+          class="icon-btn"
+          content="Open Steam Store Page"
+          @click="openLink(`https://store.steampowered.com/app/${source.app.appid.toString()}/`)"
+        />
+        <ClipboardIcon
+          v-if="devMode"
+          v-tippy="{ arrow: true, boundary: 'viewport' }"
+          class="icon-btn"
+          content="Copy App ID"
+          @click="copyToClipboard(source.app.appid.toString())"
+        />
+        <TrashIcon
+          v-if="source.installed"
+          v-tippy="{ arrow: true, boundary: 'viewport' }"
+          class="icon-btn"
+          content="Uninstall"
+          @click="page.uninstallPresence(source.app.appid)"
+        />
+      </div>
+      <div class="buttons buttons-core">
+        <UpdateIcon
+          v-if="source.update"
+          v-tippy="{ arrow: true, boundary: 'viewport' }"
+          class="icon-btn"
+          content="Update"
+          @click="page.updatePresence(source.app.appid)"
+        />
+        <CheckboxOnIcon
+          v-if="source.installed && !source.class"
+          v-tippy="{ arrow: true, boundary: 'viewport' }"
+          class="icon-btn"
+          content="Disable"
+          @click="page.toggleEnabled(source.app.appid)"
+        />
+        <CheckboxOffIcon
+          v-else-if="source.installed && source.class === 'white'"
+          v-tippy="{ arrow: true, boundary: 'viewport' }"
+          class="icon-btn"
+          content="Enable"
+          @click="page.toggleEnabled(source.app.appid)"
+        />
+        <InstallIcon
+          v-if="source.store && source.class"
+          v-tippy="{ arrow: true, boundary: 'viewport' }"
+          class="icon-btn"
+          content="Install Presence"
+          @click="page.installPresence(source.metadata)"
+        />
+        <ReinstallIcon
+          v-if="source.store && !source.class"
+          v-tippy="{ arrow: true, boundary: 'viewport' }"
+          class="icon-btn"
+          content="Reinstall Presence"
+          @click="page.installPresence(source.metadata)"
+        />
+      </div>
     </div>
   </div>
   <span v-else-if="source.type === 'no-games'" class="no-games">
@@ -161,6 +174,8 @@ import RefreshIcon from '../assets/svg/refresh.svg';
 // @ts-ignore
 import InstallIcon from '../assets/svg/install.svg';
 // @ts-ignore
+import ReinstallIcon from '../assets/svg/reinstall.svg';
+// @ts-ignore
 import SteamLogo from '../assets/svg/steam.svg';
 // @ts-ignore
 import SearchIcon from '../assets/svg/search.svg';
@@ -175,7 +190,7 @@ import SettingsIcon from '../assets/svg/settings.svg';
 
 export default Vue.extend({
   components: {
-    ClipboardIcon, GamesIcon, CheckboxOnIcon, CheckboxOffIcon, TrashIcon, RefreshIcon,
+    ClipboardIcon, GamesIcon, CheckboxOnIcon, CheckboxOffIcon, TrashIcon, RefreshIcon, ReinstallIcon,
     InstallIcon, SteamLogo, SearchIcon, CloseIcon, NotOwnedIcon, UpdateIcon, SettingsIcon
   },
   props: {
@@ -184,7 +199,7 @@ export default Vue.extend({
       required: true
     },
   },
-  data () {
+  data() {
     return {
       page: this.$parent.$parent.$parent,
       hasQuery: false

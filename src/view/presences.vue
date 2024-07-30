@@ -49,7 +49,7 @@ export default {
             text: this.errorText },
           { id: 'loading-reload', type: 'reload-btn', text: 'Refresh' }
         ];
-      
+
       let presences = this.metadatas.length ? this.metadatas.map(metadata => {
           const app = this.apps ? this.apps.get(metadata.app_id) : null;
           return {
@@ -147,7 +147,9 @@ export default {
       } catch (e) {
         this.lockedPresences.delete(metadata.app_id);
         console.error('Faled to install presence %s', metadata.app_id, e);
-        alert(`Failed to install ${metadata.name}.\n${e}`);
+        remote.dialog.showMessageBox({
+          message: `Failed to install ${metadata.name}.\n${e}`
+        });
       }
     },
     search(query: string) {

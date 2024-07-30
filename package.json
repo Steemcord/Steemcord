@@ -16,7 +16,9 @@
       "releaseType": "draft"
     },
     "win": {
-      "publish": ["github"]
+      "publish": [
+        "github"
+      ]
     },
     "mac": {
       "category": "public.app-category.utilities",
@@ -26,12 +28,16 @@
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist",
       "darkModeSupport": true,
-      "publish": ["github"]
+      "publish": [
+        "github"
+      ]
     },
     "linux": {
       "target": "tar.gz",
       "category": "Utility",
-      "publish": ["github"]
+      "publish": [
+        "github"
+      ]
     },
     "dmg": {
       "backgroundColor": "#1e272e",

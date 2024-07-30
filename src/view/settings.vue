@@ -1,7 +1,7 @@
 <template>
   <div id="settingsPage" class="page">
     <h3>Settings</h3>
-    <a v-if="$parent.discordStatus !== 1" class="router-link" @click="$parent.reconnectDiscord">
+    <a v-if="discordStatus !== 1" class="router-link" @click="$parent.reconnectDiscord">
       <RefreshIcon />
       <span>Restart RPC Clients</span>
     </a>
@@ -134,7 +134,8 @@ export default {
       'presenceNotifications',
       'steamNotifications',
       'regenLoginKey',
-      'machineIDType'
+      'machineIDType',
+      'discordStatus',
     ]),
     directoryPoint: {
       get() {

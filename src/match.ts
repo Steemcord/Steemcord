@@ -18,7 +18,7 @@ export function match(pattern: string, str: string): MatchResult {
   let varGroup;
   let strParts = str;
   let matchAnything = false;
-  let completeMatch = patternTokens.every(function(token) {
+  let completeMatch = patternTokens.every(function (token) {
     if (token.charAt(0) === '*') {
       matchAnything = true;
       varGroup = token.length;

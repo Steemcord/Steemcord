@@ -287,7 +287,7 @@ export function createRPC(presence: Presence, appID: number, dev = false, devMet
   return new RPCClient(presence, appID, dev, devMetadata);
 }
 
-export function destroyRPC(appID: number): void  {
+export function destroyRPC(appID: number): void {
   const rpc = rpcClients.get(appID);
   if (rpc) rpc.destroy();
 }

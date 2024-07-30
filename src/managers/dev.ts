@@ -151,8 +151,8 @@ async function buildDevPresence(path: string) {
     if (!(presence instanceof Presence) || !presence.clientID || (presence as any)._eventsCount <= 0) return;
 
     const devPresence = currentPresences.get(metadata.app_id);
-    if(devPresence.rpc) devPresence.rpc.destroy();
-    // Destroy current RPC before creating another one to 
+    if (devPresence.rpc) devPresence.rpc.destroy();
+    // Destroy current RPC before creating another one to
     devPresence.rpc = createRPC(presence, metadata.app_id, true, metadata);
     devPresence.metadata = metadata;
     currentPresences.set(metadata.app_id, devPresence);
@@ -223,5 +223,5 @@ export async function openFileDialog(path?: string): Promise<void> {
   watchDir(path);
 }
 
-app.once('will-quit', () => 
+app.once('will-quit', () =>
   currentPresences.keyArray().forEach(appID => destroyPresence(appID)));

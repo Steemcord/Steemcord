@@ -10,12 +10,12 @@
       <img
         v-if="metadata.icon || app.img_icon_url"
         :src="metadata.icon || app.img_icon_url"
-        :title="app.name || metadata.name"
-        :alt="app.name || metadata.name"
+        :title="(app ? app.name : null) || metadata.name"
+        :alt="(app ? app.name : null) || metadata.name"
       >
       <GamesIcon v-else />
       <div class="header-text">
-        <h3>{{ app.name || metadata.name }}</h3>
+        <h3>{{ (app ? app.name : null) || metadata.name }}</h3>
         <span>v{{ metadata.version }} by {{ metadata.author.name }}
           {{ metadata.contributors && metadata.contributors.length
             ? (metadata.contributors.length === 1
@@ -65,7 +65,7 @@ export default {
   components: { GamesIcon, ToggleInput, TextInput, NumberInput, DropdownInput },
   props: {
     appID: {
-      type: String,
+      type: Number,
       required: true
     }
   },
@@ -77,8 +77,7 @@ export default {
       metadata: null,
       rpc: null,
       dev: false,
-      loaded: false,
-      aaa: false,
+      loading: false,
       settingData: {}
     };
   },
