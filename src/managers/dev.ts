@@ -7,7 +7,7 @@ import { readdirSync, readFileSync } from 'fs';
 import { semver } from 'joi-extension-semver';
 import { join, sep } from 'path';
 import BaseJoi from 'joi';
-import Collection from '@discordjs/collection';
+import { Collection } from '@discordjs/collection';
 import { createRPC, PresenceMetadata, RPCClient } from '../rpc';
 import { getPresenceFromCode } from '../sandbox';
 import { appIDsInFolder } from './presence';
@@ -223,5 +223,4 @@ export async function openFileDialog(path?: string): Promise<void> {
   watchDir(path);
 }
 
-app.once('will-quit', () =>
-  currentPresences.keyArray().forEach(appID => destroyPresence(appID)));
+app.once('will-quit', () => Array.from(currentPresences.keys()).forEach(appID => destroyPresence(appID)));

@@ -16,7 +16,7 @@ const { shell } = window.require('electron');
 const fuzzy = window.require('fuzzy');
 const presenceManager = remote.require('./managers/presence');
 const { settings } = remote.require('./managers/settings');
-const Collection = window.require('@discordjs/collection');
+const { Collection } = window.require('@discordjs/collection');
 const steam = remote.require('./steam');
 const rpc = remote.require('./rpc');
 
@@ -41,7 +41,7 @@ export default {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       ((_) => this.ticker)();
 
-      let presences = presenceManager.availableUpdates.array().map(metadata => {
+      let presences = presenceManager.availableUpdates.values().toArray().map((metadata: any) => {
         const enabled = settings.get(`apps.${metadata.app_id}.enabled`, true);
         const app = this.apps ? this.apps.get(metadata.app_id) : null;
         return {
@@ -252,7 +252,7 @@ export default {
       }
       query = query.replace(/&/g, '&amp;').replace(/>/g, '&gt;').replace(/</g, '&lt;');
       const installedMetadatas = this.getInstalledMetadatas();
-      const updateMetadatas = presenceManager.availableUpdates.array();
+      const updateMetadatas = presenceManager.availableUpdates.values().toArray();
       this.results = fuzzy.filter(query,
         installedMetadatas
           .map(md => ({ ...md, safeName: sanitize(md.name) })),
@@ -265,7 +265,7 @@ export default {
       ) : null;
       this.updatesResults = fuzzy.filter(query,
         updateMetadatas
-          .map(md => ({ ...md, safeName: sanitize(md.name) })),
+          .map((md: { name: string }) => ({ ...md, safeName: sanitize(md.name) })),
         { pre: '<b>', post: '</b>', extract: md => md.safeName }
       );
     }

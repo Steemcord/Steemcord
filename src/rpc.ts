@@ -6,7 +6,7 @@ import Presence, { PresenceData } from './presence';
 import { app } from 'electron';
 import { activeGame, MinimalGamePresence } from './steam';
 import { settings } from './managers/settings';
-import Collection from '@discordjs/collection';
+import { Collection } from '@discordjs/collection';
 import EventEmitter from 'eventemitter3';
 import lodash from 'lodash';
 
@@ -273,7 +273,7 @@ export function clearActivity(appID?: number): void {
     lastPresenceActive = appID;
     if (rpcClients.has(appID)) rpcClients.get(appID).clearActivity();
   } else {
-    rpcClients.array().forEach(rpc => rpc.clearActivity());
+    Array.from(rpcClients.values()).forEach(rpc => rpc.clearActivity());
     lastPresenceActive = null;
     lastPresenceSet = null;
     lastPresence = null;
@@ -303,5 +303,5 @@ export function getMetadata(appID: number): PresenceMetadata {
 
 app.once(
   'will-quit',
-  async () => await Promise.all(rpcClients.array().map(c => c.destroy()))
+  async () => await Promise.all(Array.from(rpcClients.values()).map(c => c.destroy()))
 );

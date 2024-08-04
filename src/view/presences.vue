@@ -13,7 +13,7 @@ import ScrollItem from './components/GameListScrollItem.vue';
 import PresenceSettingsModal from './components/PresenceSettingsModal.vue';
 const remote = window.require('@electron/remote');
 const fuzzy = window.require('fuzzy');
-const Collection = window.require('@discordjs/collection');
+const { Collection } = window.require('@discordjs/collection');
 const presenceManager = remote.require('./managers/presence');
 const directoryPoint = remote.require('./managers/directoryPoint');
 
@@ -114,7 +114,7 @@ export default {
         return;
       }
     }
-    this.metadatas = directoryPoint.lastRead.array();
+    this.metadatas = directoryPoint.lastRead.values().toArray();
     this.errorText = null;
     this.loading = false;
   },
@@ -128,7 +128,7 @@ export default {
         this.loading = false;
         return;
       }
-      this.metadatas = directoryPoint.lastRead.array();
+      this.metadatas = directoryPoint.lastRead.values().toArray();
       this.loading = false;
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
