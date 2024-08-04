@@ -35,7 +35,7 @@
                 v-if="domainMap[domain]" v-tippy="{ arrow: true }" class="valid"
                 :content="'Open ' + domainMap[domain][0]" @click="openLink(domainMap[domain][1])"
               >{{ domain }}</a>
-              <a v-else>{{ domain }}</a>. 
+              <a v-else>{{ domain }}</a>.
               <i>Make sure to check your spam folder!</i></span>
           </div>
         </div>

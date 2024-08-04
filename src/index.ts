@@ -27,15 +27,15 @@ app.whenReady().then(async () => {
   trayManager = new TrayManager();
   remote.initialize();
 
-	await Promise.all([initUpdater(), initAutoLaunch(), autoLogin(), initPresences(), startUpdateInterval()]);
+  await Promise.all([initUpdater(), initAutoLaunch(), autoLogin(), initPresences(), startUpdateInterval()]);
 
   /*
-	app.isPackaged
-		? (updateCheckerInterval = setInterval(checkForUpdate, 15 * 1000 * 60))
-		: undefined;
+  app.isPackaged
+    ? (updateCheckerInterval = setInterval(checkForUpdate, 15 * 1000 * 60))
+    : undefined;
   */
   if (platform() === 'darwin') app.dock.hide();
-  
+
   // Prepare presence folder
   const presenceFolder = join(app.getPath('userData'), 'presences');
   try {
@@ -43,8 +43,8 @@ app.whenReady().then(async () => {
   } catch (e) {
     fs.mkdirSync(presenceFolder);
   }
-	
-	win = new BrowserWindow({
+
+  win = new BrowserWindow({
     width: settings.get('window.width', 900) as number,
     height: settings.get('window.height', 600) as number,
     x: settings.get('window.x', null) as number,
@@ -87,8 +87,8 @@ app.whenReady().then(async () => {
       message: 'This window is not being responsive.',
       buttons: ['Reload', 'Close', 'Ignore']
     });
-    if(dialogResult.response === 0) win.reload();
-      else if(dialogResult.response === 1) win.close();
+    if (dialogResult.response === 0) win.reload();
+    else if (dialogResult.response === 1) win.close();
   });
 
   win.loadURL(MAIN_APP_URL);

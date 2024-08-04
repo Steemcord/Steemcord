@@ -56,7 +56,6 @@
       </div>
     </div>
     <br>
-    <br>
     <SteamHeader
       :username="username"
       :avatar="avatar"
@@ -75,6 +74,8 @@
       :type="isActiveGame && currentPresence ? 'playing' : 'normal'"
       :richpresence="isActiveGame ? currentPresence : null"
       :app="isActiveGame ? getActiveApp() : null"
+      :large-image-url="presenceAssetIDs ? parseImageKey(presenceAssetIDs.large_image) : null"
+      :small-image-url="presenceAssetIDs ? parseImageKey(presenceAssetIDs.small_image) : null"
     />
     <a
       v-if="isActiveGame && (activeGame.presenceString || activeGame.presence.length) && !currentPresence"
@@ -146,6 +147,9 @@ export default {
     currentPresence() {
       return this.$parent.currentPresence;
     },
+    presenceAssetIDs() {
+      return this.$parent.presenceAssetIDs;
+    },
     steamID() {
       return this.username ? steam.steamID : null;
     },
@@ -157,10 +161,23 @@ export default {
     getActiveApp() {
       return this.$parent.apps && this.activeGame && this.activeGame.appID ? this.$parent.apps.get(this.activeGame.appID) : null;
     },
+    parseImageKey(imageKey: string) {
+      if (!this.$parent.presenceAssetIDs || !imageKey) return null;
+      if (imageKey.startsWith('mp:')) return `https://media.discordapp.net/${imageKey.slice(3)}`;
+      else return `https://cdn.discordapp.com/app-assets/${this.$parent.presenceAssetIDs.client}/${imageKey}.png`;
+    },
     async login() {
       if (this.username) return;
-      if (!this.$refs.accountName.value) return alert('Please enter an account name.');
-      if (!this.$refs.password.value) return alert('Please enter a password.');
+      if (!this.$refs.accountName.value) {
+        return remote.dialog.showMessageBox({
+          message: 'Please enter an account name.'
+        });
+      }
+      if (!this.$refs.password.value) {
+        return remote.dialog.showMessageBox({
+          message: 'Please enter a password.'
+        });
+      }
       this.loggingIn = true;
       const { event, result } = await steam.logOn({
         accountName: this.$refs.accountName.value.toLowerCase(),
@@ -172,7 +189,9 @@ export default {
         const error = result[0];
         const errorType = error.message;
         console.log('failed to log in', { error, errorType });
-        alert(this.errorDescriptions[errorType] || 'Failed to log in: ' + errorType);
+        remote.dialog.showMessageBox({
+          message: this.errorDescriptions[errorType] || 'Failed to log in: ' + errorType
+        });
         if (errorType === 'InvalidPassword') this.$refs.password.value = '';
         this.$refs.password.focus();
       }

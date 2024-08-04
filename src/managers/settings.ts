@@ -4,9 +4,9 @@ import { update as updateAutoLaunch } from './launch';
 export const settings = new ElectronStore({});
 
 export interface ExtensionSettings {
-  enabled: boolean;
-  autoLaunch: boolean;
-  devMode: boolean;
+	enabled: boolean;
+	autoLaunch: boolean;
+	devMode: boolean;
 	language: string;
 	windowPosition: {
 		x: number;

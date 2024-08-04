@@ -16,6 +16,7 @@ export const emitter = new EventEmitter();
 let lastPresenceSet: number = null;
 let lastPresenceActive: number = null;
 export let lastPresence: PresenceData = null;
+export let lastPresenceAssetIDs: { large_image: string, small_image: string, client: string } = null;
 
 export interface PresenceMetadata {
   app_id: number;
@@ -141,14 +142,20 @@ export class RPCClient {
 
     this.client
       .setActivity(presenceData)
-      .catch(e => logger.error('Activity Set Error', e));
-
-    this.currentPresence = presenceData;
-    this.presence.currentPresence = presenceData;
-    lastPresenceSet = this.appID;
-    lastPresence = presenceData;
-    emitter.emit('update');
-    logger.info(`Activity Updated (${this.presence.clientID}, ${this.appID})`);
+      .then(r => {
+        if (r.assets) {
+          lastPresenceAssetIDs = { ...r.assets, client: this.presence.clientID };
+        } else lastPresenceAssetIDs = null;
+      })
+      .catch(e => logger.error('Activity Set Error', e))
+      .finally(() => {
+        this.currentPresence = presenceData;
+        this.presence.currentPresence = presenceData;
+        lastPresenceSet = this.appID;
+        lastPresence = presenceData;
+        emitter.emit('update');
+        logger.info(`Activity Updated (${this.presence.clientID}, ${this.appID})`);
+      });
   }
 
   clearActivity(): void {
@@ -157,6 +164,7 @@ export class RPCClient {
     if (lastPresenceSet === this.appID) {
       lastPresenceSet = null;
       lastPresence = null;
+      lastPresenceAssetIDs = null;
       emitter.emit('update');
     }
 
@@ -279,7 +287,7 @@ export function createRPC(presence: Presence, appID: number, dev = false, devMet
   return new RPCClient(presence, appID, dev, devMetadata);
 }
 
-export function destroyRPC(appID: number): void  {
+export function destroyRPC(appID: number): void {
   const rpc = rpcClients.get(appID);
   if (rpc) rpc.destroy();
 }

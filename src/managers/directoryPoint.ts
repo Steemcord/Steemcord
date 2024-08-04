@@ -8,7 +8,7 @@ import { settings } from './settings';
 import { Collection } from '@discordjs/collection';
 
 interface DirectoryPoint {
-  directories: Array<GitHubRepoDirectory|ExternalDirectory|MetadataDirectory>;
+  directories: Array<GitHubRepoDirectory | ExternalDirectory | MetadataDirectory>;
   url?: string;
 }
 
@@ -45,7 +45,7 @@ export const lastRead: Collection<number, PresenceMetadata> = new Collection();
 export let lastPointRead: DirectoryPoint = null;
 
 export function getDirectoryPoint(): string {
-	return settings.get('directoryPoint', MAIN_DIRECTORY_POINT) as string;
+  return settings.get('directoryPoint', MAIN_DIRECTORY_POINT) as string;
 }
 
 export async function readDirectoryPoint(): Promise<boolean> {
@@ -53,13 +53,13 @@ export async function readDirectoryPoint(): Promise<boolean> {
   try {
     const directoryPoint = await fetch(getDirectoryPoint()).then(r => r.json()) as DirectoryPoint;
     lastPointRead = directoryPoint;
-    
+
     for (const directory of directoryPoint.directories) {
-      if(directory.type === 'github_repo') {
+      if (directory.type === 'github_repo') {
         if (!directory.branch) directory.branch = 'master';
         const repoTree = await fetch(`https://api.github.com/repos/${directory.repo}/git/trees/${directory.branch}?recursive=1`).then(r => r.json()) as GitHubTree;
         const metadatas = repoTree.tree.filter(file => file.type === 'blob' && match(directory.match, file.path));
-        
+
         for (const metadata of metadatas) {
           try {
             const metadataURL = `https://github.com/${directory.repo}/raw/${directory.branch}/${metadata.path}`;
@@ -73,7 +73,7 @@ export async function readDirectoryPoint(): Promise<boolean> {
             continue;
           }
         }
-      } else if(directory.type === 'multi_metadata') {
+      } else if (directory.type === 'multi_metadata') {
         try {
           const metadatas = await fetch(directory.url).then(r => r.json()) as Array<PresenceMetadata>;
           metadatas.forEach(metadata => {
@@ -84,7 +84,7 @@ export async function readDirectoryPoint(): Promise<boolean> {
           logger.info('Could not get multi metadata @', directory.url, e);
           continue;
         }
-      } else if(directory.type === 'external_metadata') {
+      } else if (directory.type === 'external_metadata') {
         try {
           const metadata = await fetch(directory.url).then(r => r.json()) as PresenceMetadata;
           if (!metadata.script_url && directory.url.endsWith('/metadata.json'))
@@ -95,7 +95,7 @@ export async function readDirectoryPoint(): Promise<boolean> {
           logger.info('Could not get external metadata @', directory.url, e);
           continue;
         }
-      } else if(directory.type === 'metadata') {
+      } else if (directory.type === 'metadata') {
         if (!directory.script_url) continue;
         delete directory.type;
         lastRead.set(directory.app_id, directory);

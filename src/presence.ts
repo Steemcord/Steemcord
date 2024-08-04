@@ -7,13 +7,13 @@ interface PresenceOptions {
 }
 
 export interface PresenceData {
-	state?: string;
-	details?: string;
-	startTimestamp?: number;
-	endTimestamp?: number;
-	largeImageKey?: string;
-	largeImageText?: string;
-	smallImageKey?: string;
+  state?: string;
+  details?: string;
+  startTimestamp?: number;
+  endTimestamp?: number;
+  largeImageKey?: string;
+  largeImageText?: string;
+  smallImageKey?: string;
   smallImageText?: string;
   partySize?: number;
   partyMax?: number;
@@ -34,10 +34,10 @@ export default class Presence extends EventEmitter {
 
   constructor(options: PresenceOptions) {
     super();
-		this.clientID = options.clientID;
+    this.clientID = options.clientID;
     this.appID = options.appID;
 
-    if(options.module)
+    if (options.module)
       options.module.exports = this;
   }
 
