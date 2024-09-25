@@ -174,6 +174,7 @@ export default {
       discordUser: presenceManager.rpc ? presenceManager.rpc.user : null,
       discordStatus: presenceManager.rpcConnected ? 2 : 3,
       nextUpdateAvailable: updater.updateAvailable,
+      lastDiscordAutoReconnect: null,
       ...computedSettings.fillData()
     };
   },
@@ -192,6 +193,7 @@ export default {
       this.userAvatar = steam.userAvatar;
       this.activeGame = steam.activeGame;
       console.log('Presence update', presence);
+      this.attemptAutoDiscordReconnect();
     };
     const connectBind = () => {
       this.discordStatus = 2;
@@ -258,11 +260,19 @@ export default {
       this.abortController = null;
       this.$modal.hide('authenticating');
     },
-    async reconnectDiscord() {
+    attemptAutoDiscordReconnect() {
+      if (this.discordStatus !== 3) return;
+      const now = Date.now();
+      if (!this.lastDiscordAutoReconnect || now >= ((1000 * 60 * 10) + this.lastDiscordAutoReconnect)) {
+        this.lastDiscordAutoReconnect = now;
+        this.reconnectDiscord(true);
+      }
+    },
+    async reconnectDiscord(silent = false) {
       this.discordStatus = 1;
       if (presenceManager.rpc) await presenceManager.rpc.destroy();
       const success = await presenceManager.connect();
-      if (!success) {
+      if (!success && !silent) {
         remote.dialog.showMessageBox({
           message: 'Couldn\'t connect to Discord. Make sure that the client is running.'
         });
